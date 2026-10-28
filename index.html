@@ -648,6 +648,30 @@ button.station{border:0;text-align:left;cursor:pointer;font:inherit}
 .syncbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;margin:0 0 8px;padding:8px 12px;border-radius:14px;font-size:12.5px;line-height:1.35;background:var(--surface);border:1px solid var(--line)}
 .syncbar[data-s="ok"]{border-color:var(--good)}.syncbar[data-s="err"]{border-color:var(--warn)}.syncbar[data-s="out"]{border-color:var(--accent)}
 .syncbar b{margin-right:4px}.syncbar #gsiBtn{min-height:32px}
+.welcome{position:fixed;inset:0;z-index:40;overflow:auto;background:radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,var(--accent) 22%,var(--bg)) 0%,var(--bg) 70%)}
+.wc-in{max-width:620px;margin:0 auto;min-height:100%;box-sizing:border-box;display:grid;align-content:center;gap:18px;padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 32px max(16px,env(safe-area-inset-left,0px))}
+.wc-brand{text-align:center;display:grid;justify-items:center;gap:6px}
+.wc-brand h1{margin:0;font:800 clamp(34px,9vw,52px)/1.05 var(--display);color:var(--fg)}
+.wc-logo{width:72px;height:72px}
+.wc-sub{margin:0;color:var(--muted);max-width:44ch}
+.wc-card{display:grid;gap:12px;justify-items:center;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px 18px}
+.wc-card p{margin:0}.wc-ok{color:var(--good);font-weight:600}
+.wc-big{justify-self:stretch;font-size:17px;padding:14px 18px}
+.wc-gsi{min-height:44px;display:grid;place-items:center}
+.wc-or{display:flex;align-items:center;gap:10px;width:100%;color:var(--muted);font-size:13px}.wc-or::before,.wc-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.wc-note{margin:0;color:var(--muted);font-size:13px;text-align:center}
+.wc-head{text-align:center}.wc-head h2{margin:4px 0 0;font:700 26px/1.2 var(--display)}
+.wc-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.wc-pick.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.wc-opt{display:grid;justify-items:center;gap:4px;padding:10px 8px 12px;border-radius:18px;border:2px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;cursor:pointer}
+.wc-opt canvas{width:100%;max-width:156px;height:auto;aspect-ratio:156/192}
+.wc-opt b{font-size:16px}.wc-opt small{color:var(--muted);font-size:12px}
+.wc-opt.on{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 25%,transparent)}
+.wc-in .fbtns{justify-content:center}
+.qcard{position:relative}
+.wmark{position:absolute;inset:0;pointer-events:none;opacity:.10;background-repeat:repeat;z-index:3;border-radius:inherit}
+.qcard .prompt,.qcard .opts,.qcard .chips{-webkit-user-select:none;user-select:none}
+.leavenote{margin:0;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--warn) 18%,transparent);font-size:13.5px}
 .combostone{padding:6px 10px;border-radius:10px;background:color-mix(in srgb,#8fb0d8 22%,transparent)}
 .ftools{display:flex;flex-wrap:wrap;gap:6px}
 .tchip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
@@ -3632,7 +3656,7 @@ function kqSummary(k){const refs=kqRefs(k);let toida=0,dat=0,toidaLam=0,lam=0,du
   const diem=Math.round((35*P+35*C+20*R+10*V)*10)/10,vd=muc[3][1]?muc[3][0]/muc[3][1]:1;
   let bac=lam<5||diem<30?'G':diem>=95&&P>=1&&vd>=.9?'SS':diem>=88&&P>=.9?'S':diem>=75&&P>=.8?'A':diem>=60?'B':diem>=45?'C':'D';
   if(bac==='SS'&&!(P>=1&&vd>=.9))bac='S';
-  return{ma_cd:CD_OF[k],so_cau:refs.length,lam,dung,diem_dat:dat,diem_toi_da:toida,giay:Math.round(giay),ngay_luyen:(FG.kqD[k]||[]).length,P:+P.toFixed(3),C:+C.toFixed(3),R:+R.toFixed(3),V:+V.toFixed(3),diem,bac,muc:{biet:muc[1],hieu:muc[2],vandung:muc[3]}}}
+  return{ma_cd:CD_OF[k],so_cau:refs.length,lam,dung,diem_dat:dat,diem_toi_da:toida,giay:Math.round(giay),ngay_luyen:(FG.kqD[k]||[]).length,roi_tab:(FG.roiTab||{})[k]||0,P:+P.toFixed(3),C:+C.toFixed(3),R:+R.toFixed(3),V:+V.toFixed(3),diem,bac,muc:{biet:muc[1],hieu:muc[2],vandung:muc[3]}}}
 window.kqSummary=kqSummary;
 
 /* ---------- đồng bộ ---------- */
@@ -3644,7 +3668,7 @@ let armed=false;/* chỉ tính là "có thay đổi" sau khi đã nạp xong, đ
 const _fsS=fSave;fSave=function(){_fsS();if(armed)LS.set(TOUCH,nowISO())};
 function snapshot(){const game={};try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!SKIP(k))game[k]=localStorage.getItem(k)}}catch(e){}
   const cd={};Object.keys(CD_OF).forEach(k=>{cd[CD_OF[k]]=kqSummary(k)});return{v:1,cap_nhat:LS.get(TOUCH,nowISO()),cd,kq:FG.kq,game}}
-function applyRemote(d){try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!SKIP(k)&&k!==OWN)keys.push(k)}keys.forEach(k=>localStorage.removeItem(k));
+function applyRemote(d){window.__cgtLeaving=true;try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!SKIP(k)&&k!==OWN)keys.push(k)}keys.forEach(k=>localStorage.removeItem(k));
   Object.entries(d.game||{}).forEach(([k,v])=>{if(!SKIP(k)&&k!==OWN)localStorage.setItem(k,v)});localStorage.setItem(TOUCH,d.cap_nhat||nowISO())}catch(e){}location.reload()}
 function wipeLocal(){try{const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('cgt-')&&k!==SK)keys.push(k)}keys.forEach(k=>localStorage.removeItem(k))}catch(e){}}
 async function call(body){const r=await fetch(CFG.relay,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});return r.json()}
@@ -3658,13 +3682,13 @@ let gsiReady=null;
 function loadGsi(){if(gsiReady)return gsiReady;gsiReady=new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.id)return ok();const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=()=>ok();s.onerror=()=>{gsiReady=null;no()};document.head.appendChild(s)});return gsiReady}
 function renderBtn(){loadGsi().then(()=>{google.accounts.id.initialize({client_id:CFG.clientId,callback:r=>login(r.credential),auto_select:false});const el=document.getElementById('gsiBtn');if(el)google.accounts.id.renderButton(el,{theme:'outline',size:'medium',text:'signin_with',locale:'vi'})}).catch(()=>show('err','Không tải được nút đăng nhập Google. Kiểm tra mạng rồi tải lại trang.'))}
 const hhmm=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
-async function login(cred){show('busy','Đang đăng nhập…');try{const r=await call({op:'login',idToken:cred});if(!r.ok)throw new Error(r.err);
+async function login(cred){try{sessionStorage.setItem('cgt-welcomed','1')}catch(e){}show('busy','Đang đăng nhập…');try{const r=await call({op:'login',idToken:cred});if(!r.ok)throw new Error(r.err);
   LS.set(SK,r.session);const prevOwner=LS.get(OWN,'');LS.set(OWN,r.hash);
-  if(prevOwner&&prevOwner!==r.hash){if(r.data)return applyRemote(r.data);wipeLocal();LS.set(SK,r.session);LS.set(OWN,r.hash);return location.reload()}
+  if(prevOwner&&prevOwner!==r.hash){if(r.data)return applyRemote(r.data);window.__cgtLeaving=true;wipeLocal();LS.set(SK,r.session);LS.set(OWN,r.hash);return location.reload()}
   /* máy chưa có chủ: tiến độ trên mạng luôn thắng, tránh bản mới tinh đè lên thành tích cũ */
   if(r.data&&(!prevOwner||r.data.cap_nhat>LS.get(TOUCH,'')))return applyRemote(r.data);
   await push();}catch(e){show('err','Đăng nhập chưa được ('+e.message+'). Em thử lại nhé.');setTimeout(()=>show('out'),3000)}}
-async function logout(){await push();wipeLocal();try{localStorage.removeItem(SK)}catch(e){}location.reload()}
+async function logout(){await push();window.__cgtLeaving=true;wipeLocal();try{sessionStorage.removeItem('cgt-welcomed')}catch(e){}try{localStorage.removeItem(SK)}catch(e){}location.reload()}
 let pushing=false,again=false;
 async function push(){const s=LS.get(SK,'');if(!s)return;if(pushing){again=true;return}pushing=true;show('busy','Đang lưu tiến độ…');
   try{const r=await call({op:'save',session:s,data:snapshot()});if(r.ok){LS.set(PEND,'');show('ok','Đã lưu tiến độ lúc '+hhmm())}else if(r.err==='session'){LS.set(SK,'');show('out')}else throw new Error(r.err)}
@@ -3678,10 +3702,11 @@ async function boot(){setTimeout(()=>{armed=true},1500);const s=LS.get(SK,'');if
 /* khi nào ghi: kết thúc lượt, qua một nấc Phòng Luyện Tập, rèn đồ (gộp lại sau 20 giây), có mạng trở lại */
 const _fofS=forgeOnFinish;forgeOnFinish=function(){_fofS();setTimeout(push,1500)};
 if(typeof ltReward==='function'){const _lrS=ltReward;ltReward=function(){const m=_lrS.apply(this,arguments);setTimeout(push,800);return m}}
-let deb;const _fs2=fSave;fSave=function(){_fs2();if(!armed)return;clearTimeout(deb);deb=setTimeout(push,20000)};
+let deb;const _fs2=fSave;fSave=function(){if(window.__cgtLeaving)return;/* đang thay dữ liệu rồi tải lại: không ghi đè */_fs2();if(!armed)return;clearTimeout(deb);deb=setTimeout(push,20000)};
 addEventListener('online',()=>{if(LS.get(PEND,'')==='1')push()});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&LS.get(SK,'')&&navigator.sendBeacon){try{navigator.sendBeacon(CFG.relay,new Blob([JSON.stringify({op:'save',session:LS.get(SK,''),data:snapshot()})],{type:'text/plain'}))}catch(e){}}});
-window.cgtSync={push,boot,snapshot};boot()})();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&!window.__cgtLeaving&&LS.get(SK,'')&&navigator.sendBeacon){try{navigator.sendBeacon(CFG.relay,new Blob([JSON.stringify({op:'save',session:LS.get(SK,''),data:snapshot()})],{type:'text/plain'}))}catch(e){}}});
+window.cgtSync={push,boot,snapshot,logout,loggedIn:()=>!!LS.get(SK,''),
+  mountLogin(el){loadGsi().then(()=>{google.accounts.id.initialize({client_id:CFG.clientId,callback:r=>{try{sessionStorage.setItem('cgt-welcomed','1')}catch(e){}login(r.credential)},auto_select:false});google.accounts.id.renderButton(el,{theme:'filled_blue',size:'large',text:'signin_with',shape:'pill',locale:'vi'})}).catch(()=>{el.textContent='Không tải được nút đăng nhập Google, kiểm tra mạng rồi tải lại trang.'})}};boot()})();
 
 /* ---------- ẩn / hiện các nút chức năng ---------- */
 const hudEl=document.querySelector('.hud'),hudBtn=document.getElementById('hudToggle');
@@ -3691,6 +3716,81 @@ setHud(LS.get('cgt-hud','full')==='min');
 
 const _h=location.hash.slice(1);
 setTopic(TOPICS[_h]?_h:LS.get('cgt-topic','giao-thuc'));
+/* ================= MÀN HÌNH CHÀO: đăng nhập → tạo nhân vật (lần đầu) → chọn chủ đề ================= */
+const STARTERS=['knight','robot','astro','princess'];
+const isNewPlayer=()=>!FG.intro&&!FG.av.set&&!(FG.qDone>0);
+const WC={step:'hello',base:null,outfit:null};
+document.body.insertAdjacentHTML('beforeend',`<div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="wcTitle"><div class="wc-in" id="wcBody"></div></div>`);
+const wcEl=document.getElementById('welcome'),wcBody=document.getElementById('wcBody');
+const _hashTopic=TOPICS[_h]?_h:null; /* _h = hash lúc mở trang, trước khi setTopic ghi lại hash */
+function wcSeen(){try{return sessionStorage.getItem('cgt-welcomed')==='1'}catch(e){return false}}
+function wcMark(){try{sessionStorage.setItem('cgt-welcomed','1')}catch(e){}}
+function welcomeClose(){wcEl.hidden=true;clearInterval(wcPoll)}
+window.welcomeClose=welcomeClose;
+let wcPoll=null;
+function wcPreview(cv,base,outfit){const av=Object.assign({},FG.av,{base});if(base==='nam'&&!FG.av.set)av.hair=0;
+  try{renderTarget(1.2,{cv,x:cv.getContext('2d'),w:78,h:96,parts:[]},{av,o:OF(outfit),lv:{hat:0,shirt:0,pants:0,weapon:0},ev:{hat:1,shirt:1,pants:1,weapon:1},acc:[],face:false})}catch(e){}}
+function wcRender(){const S=window.cgtSync,logged=S&&S.loggedIn(),P=FG.av.base!=='nam';let h='';
+  if(WC.step==='hello'){
+    h=`<div class="wc-brand"><svg class="wc-logo" aria-hidden="true"><use href="#i-packet"/></svg><p class="crumb">Ôn tập Tin học · THPT Hữu Nghị 80</p><h1 id="wcTitle">Cảng Gói Tin</h1><p class="wc-sub">Lên tàu, trả lời câu hỏi để đi hết hành trình, rèn trang bị và lên bậc từ Gà con tới SS.</p></div>
+    <div class="wc-card">${S?(logged?`<p class="wc-ok">Em đã đăng nhập. Tiến độ được lưu trên mọi máy.</p><button type="button" class="btn primary wc-big" id="wcGo">${isNewPlayer()?'Tạo nhân vật':'Vào chơi'}</button><button type="button" class="btn small" id="wcOut">Đăng xuất / đổi tài khoản</button>`
+      :`<p><b>Đăng nhập bằng Google</b> để làm tiếp ở nhà, ở trường, trên điện thoại.</p><div id="wcGsi" class="wc-gsi"></div><div class="wc-or"><span>hoặc</span></div><button type="button" class="btn" id="wcGuest">Chơi trên máy này, không đăng nhập</button><p class="wc-note">Không đăng nhập thì tiến độ chỉ nằm trên trình duyệt của máy này.</p>`)
+      :`<p>Tiến độ của em được lưu trên trình duyệt của máy này.</p><button type="button" class="btn primary wc-big" id="wcGuest">${isNewPlayer()?'Bắt đầu: tạo nhân vật':'Vào chơi'}</button>`}</div>`}
+  else if(WC.step==='base'){
+    h=`<div class="wc-head"><p class="crumb">Bước 1/2 · Tạo nhân vật</p><h2 id="wcTitle">Nhân vật của em là</h2></div>
+    <div class="wc-pick two">${[['nu','Nữ'],['nam','Nam']].map(([b,l])=>`<button type="button" class="wc-opt ${WC.base===b?'on':''}" data-base="${b}" aria-pressed="${WC.base===b}"><canvas width="156" height="192" data-pv="${b}"></canvas><b>${l}</b></button>`).join('')}</div>
+    <p class="wc-note">Da, tóc, mắt và dáng người em chỉnh thêm trong Tủ đồ › Ngoại hình.</p>
+    <div class="fbtns"><button type="button" class="btn" id="wcBack">Quay lại</button><button type="button" class="btn primary" id="wcNext" ${WC.base?'':'disabled'}>Tiếp: chọn trang phục</button></div>`}
+  else if(WC.step==='outfit'){const P2=WC.base!=='nam';
+    h=`<div class="wc-head"><p class="crumb">Bước 2/2 · Tạo nhân vật</p><h2 id="wcTitle">Chọn trang phục khởi đầu</h2></div>
+    <div class="wc-pick">${STARTERS.map(id=>{const o=OF(id);return`<button type="button" class="wc-opt ${WC.outfit===id?'on':''}" data-outfit="${id}" aria-pressed="${WC.outfit===id}"><canvas width="156" height="192" data-po="${id}"></canvas><b>${oName(o,P2)}</b><small>${o.tag}</small></button>`}).join('')}</div>
+    <p class="wc-note">Bộ khởi đầu là bộ chủ lực tháng này, rèn được ngay. Bộ khác mở bằng Xu Vàng hoặc Bùa Đỏ trong Tủ đồ.</p>
+    <div class="fbtns"><button type="button" class="btn" id="wcBack">Quay lại</button><button type="button" class="btn primary" id="wcDone" ${WC.outfit?'':'disabled'}>Lên tàu thôi!</button></div>`}
+  wcBody.innerHTML=h;wcBind()}
+function wcBind(){const g=id=>wcBody.querySelector('#'+id),S=window.cgtSync;
+  wcBody.querySelectorAll('[data-pv]').forEach(cv=>wcPreview(cv,cv.dataset.pv,cv.dataset.pv==='nam'?'knight':'princess'));
+  wcBody.querySelectorAll('[data-po]').forEach(cv=>wcPreview(cv,WC.base||'nu',cv.dataset.po));
+  if(g('wcGsi')&&S)S.mountLogin(g('wcGsi'));
+  const enter=()=>{wcMark();if(isNewPlayer()){WC.step='base';WC.base=null;wcRender()}else wcFinish()};
+  if(g('wcGuest'))g('wcGuest').onclick=enter;
+  if(g('wcGo'))g('wcGo').onclick=enter;
+  if(g('wcOut'))g('wcOut').onclick=()=>S.logout();
+  wcBody.querySelectorAll('[data-base]').forEach(b=>b.onclick=()=>{WC.base=b.dataset.base;try{SND.tap()}catch(e){}wcRender()});
+  wcBody.querySelectorAll('[data-outfit]').forEach(b=>b.onclick=()=>{WC.outfit=b.dataset.outfit;try{SND.tap()}catch(e){}wcRender()});
+  if(g('wcBack'))g('wcBack').onclick=()=>{WC.step=WC.step==='outfit'?'base':'hello';wcRender()};
+  if(g('wcNext'))g('wcNext').onclick=()=>{WC.step='outfit';WC.outfit=WC.outfit||'knight';wcRender()};
+  if(g('wcDone'))g('wcDone').onclick=wcCreate;
+  const f=wcBody.querySelector('.btn.primary:not([disabled]),.wc-opt');if(f&&WC.step!=='hello')f.focus()}
+function wcCreate(){const id=WC.outfit,old=WD.wear;
+  FG.av.base=WC.base;if(WC.base==='nam')FG.av.hair=0;
+  if(!WD.own.includes(id)){WD.lv[id]=WD.lv[old]||{hat:0,shirt:0,pants:0,weapon:0};WD.evo[id]=WD.evo[old]||{hat:1,shirt:1,pants:1,weapon:1};if(old!==id&&!(FG.qDone>0)){WD.own=WD.own.filter(x=>x!==old);delete WD.lv[old];delete WD.evo[old]}WD.own.unshift(id)}
+  WD.wear=id;WD.main=id;FG.intro={on:today(),base:WC.base,outfit:id};
+  try{aliasTarget()}catch(e){}if(typeof buildNames==='function')try{buildNames()}catch(e){}fSave();try{drawHeroIco()}catch(e){}try{chime(7,true)}catch(e){}
+  toast(`Chào ${oName(OF(id),WC.base!=='nam')} mới của Cảng Gói Tin!`);wcFinish()}
+function wcFinish(){welcomeClose();if(_hashTopic)return;openTopics()}
+/* luôn hiện khi mở trang; trong cùng một phiên (đã qua màn chào, hoặc vừa đăng nhập rồi tải lại) thì không hiện lại */
+if(wcSeen()&&!isNewPlayer())wcEl.hidden=true;
+else{if(wcSeen()&&isNewPlayer())WC.step='base';wcRender();
+  wcPoll=setInterval(()=>{if(wcEl.hidden||WC.step!=='hello')return;const S=window.cgtSync;if(!S)return;const li=S.loggedIn();if(li!==wcPoll.li){wcPoll.li=li;if(wcPoll.li!==undefined||li)wcRender()}},600)}
+addEventListener('keydown',e=>{if(!wcEl.hidden&&e.key==='Escape'){e.stopImmediatePropagation()}},true);
+
+/* ================= CHỐNG CHỤP MÀN HÌNH NHỜ AI GIẢI (làm khó + để lại dấu vết) ================= */
+FG.roiTab=FG.roiTab||{};
+const qcardEl=document.getElementById('card');
+const wmEl=document.createElement('div');wmEl.className='wmark';wmEl.setAttribute('aria-hidden','true');
+function wmText(){let who='khách';try{const o=localStorage.getItem('cgt-owner');if(o)who='mã '+o.slice(0,6)}catch(e){}const d=new Date(),p=n=>String(n).padStart(2,'0');return`Cảng Gói Tin · ${who} · ${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}`}
+function wmPaint(){const t=wmText();if(wmEl.dataset.t===t&&wmEl.isConnected)return;wmEl.dataset.t=t;
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><text x='0' y='90' transform='rotate(-22 150 75)' font-family='sans-serif' font-size='13' fill='%23808080'>${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text></svg>`;
+  wmEl.style.backgroundImage=`url("data:image/svg+xml;utf8,${svg.replace(/#/g,'%23')}")`;if(!wmEl.isConnected)qcardEl.appendChild(wmEl)}
+const _rcA=renderCard;renderCard=function(){const r=_rcA.apply(this,arguments);try{wmPaint()}catch(e){}return r};
+/* không cho bôi đen, sao chép nội dung câu hỏi */
+qcardEl.addEventListener('copy',e=>{if(RUN.phase==='answer'){e.preventDefault();toast('Câu hỏi không sao chép được. Em tự suy nghĩ nhé!')}});
+/* ghi nhận rời trang trong lúc đang trả lời */
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState!=='hidden'||RUN.phase!=='answer'||!wcEl.hidden)return;const k=tKey();FG.roiTab[k]=(FG.roiTab[k]||0)+1;RUN.leave=(RUN.leave||0)+1;fSave()});
+addEventListener('blur',()=>{/* chuyển cửa sổ trên máy tính */if(document.visibilityState==='visible'&&RUN.phase==='answer'&&wcEl.hidden){RUN.blur=(RUN.blur||0)+1}});
+const _finA=forgeOnFinish;forgeOnFinish=function(){_finA();const n=(RUN.leave||0);if(n>0){const box=card.querySelector('.result .top');if(box)box.insertAdjacentHTML('afterend',`<p class="leavenote">Trong lượt này em đã rời trang ${n} lần khi đang trả lời. Số lần rời trang được ghi vào kết quả để thầy cô xem.</p>`)}};
+try{wmPaint()}catch(e){}setInterval(()=>{try{wmPaint()}catch(e){}},30000);
+
 </script>
 
 </body></html>
