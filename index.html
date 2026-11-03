@@ -689,6 +689,8 @@ button.station{border:0;text-align:left;cursor:pointer;font:inherit}
 .wmark{position:absolute;inset:0;pointer-events:none;opacity:.10;background-repeat:repeat;z-index:3;border-radius:inherit}
 .qcard .prompt,.qcard .opts,.qcard .chips{-webkit-user-select:none;user-select:none}
 .leavenote{margin:0;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--warn) 18%,transparent);font-size:13.5px}
+
+.kd-1 .wmark{opacity:.17}.kd-2 .wmark{opacity:.3}
 /* ---- Ôn theo chủ đề ---- */
 .nh-wrap{grid-column:1/-1;display:grid;gap:14px;margin-top:6px;padding-top:14px;border-top:1px solid var(--line)}
 .nh-head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end;justify-content:space-between}.nh-head h3{margin:2px 0 0;font:700 22px var(--display)}
@@ -870,16 +872,41 @@ button.station{border:0;text-align:left;cursor:pointer;font:inherit}
 .on-paper .paper{animation:xuPaper 1.2s ease both;animation-delay:1.2s}
 @keyframes xuPaper{from{transform:translateY(-8px)}to{transform:translateY(2px)}}
 .xu-kn{margin:8px 0 0}
-/* làn sóng: dải chữ rõ trôi qua, phần còn lại hoà hẳn vào nền (trong suốt 100%) */
-#card.wv-on .bubble .q,#card.wv-on #qbody{--wg:linear-gradient(100deg,transparent 0%,transparent var(--w0),#000 var(--w1),#000 var(--w2),transparent var(--w3),transparent 100%);-webkit-mask-image:var(--wg);mask-image:var(--wg);-webkit-mask-size:260% 100%;mask-size:260% 100%;animation:wvMove var(--wvs) linear infinite}
-.wv-1 #card{--w0:14%;--w1:24%;--w2:46%;--w3:56%;--wvs:3.6s}
-.wv-2 #card{--w0:20%;--w1:27%;--w2:40%;--w3:47%;--wvs:3s}
-#card.wv-on #qbody{animation-delay:-.7s}
-#card.wv-hold .bubble .q,#card.wv-hold #qbody{animation-play-state:paused}
-@keyframes wvMove{from{-webkit-mask-position:100% 0;mask-position:100% 0}to{-webkit-mask-position:-60% 0;mask-position:-60% 0}}
-/* giảm chuyển động: không trôi mượt, đổi luân phiên từng dòng mỗi 1,6 giây */
-@media (prefers-reduced-motion:reduce){#card.wv-on .bubble .q,#card.wv-on #qbody{-webkit-mask-image:repeating-linear-gradient(180deg,#000 0 1.6em,transparent 1.6em 3.2em);mask-image:repeating-linear-gradient(180deg,#000 0 1.6em,transparent 1.6em 3.2em);-webkit-mask-size:100% 3.2em;mask-size:100% 3.2em;animation:wvStep 3.2s steps(1) infinite}}
-@keyframes wvStep{0%{-webkit-mask-position:0 0;mask-position:0 0}50%{-webkit-mask-position:0 1.6em;mask-position:0 1.6em}}
+/* chữ sóng: con trỏ đọc + chữ xáo ngoài con trỏ (giữ nguyên bề rộng ký tự gốc để dòng chữ không nhảy) */
+#card.wv-on .wc{position:relative}
+#card.wv-on .wc.o{-webkit-text-fill-color:transparent;text-shadow:none}
+#card.wv-on .wc.o::after{content:attr(data-s);position:absolute;left:0;top:0;-webkit-text-fill-color:currentColor;opacity:var(--wo,.3);pointer-events:none;user-select:none}
+#card.wv-on .wc.e{opacity:.6}
+#card.wv-on .wc:not(.o){transition:opacity .12s}
+#card.wv-on .bubble .q,#card.wv-on #qbody{user-select:none;-webkit-user-select:none}
+/* kẻ dòng: nền của mỗi mảnh chữ (inline, nhân bản theo từng dòng) vẽ đường ở đỉnh chữ thường và chân chữ */
+#card.kd-on .kd{background-image:radial-gradient(circle,#fff 0 22%,hsla(var(--h1,40),100%,70%,.9) 38%,transparent 70%),radial-gradient(circle,#fff 0 22%,hsla(var(--h2,200),100%,70%,.9) 38%,transparent 70%),linear-gradient(90deg,transparent,hsla(var(--h1,40),95%,62%,.12) 45%,hsla(var(--h1,40),100%,70%,.95)),linear-gradient(90deg,transparent,hsla(var(--h2,200),95%,62%,.12) 45%,hsla(var(--h2,200),100%,70%,.95));background-repeat:no-repeat;background-size:7px 7px,7px 7px,var(--sw,64%) 2px,var(--sw,64%) 2px;background-position:var(--p1x,-50%) var(--p1y,0),var(--p2x,-50%) var(--p2y,0),var(--s1x,-50%) var(--s1y,0),var(--s2x,-50%) var(--s2y,0);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.kd-2 #card.kd-on .kd{--sw:70%;background-size:9px 9px,9px 9px,var(--sw) 3px,var(--sw) 3px}
+.kd-probe{visibility:hidden;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){#card.kd-on .kd{--s1x:-50%;--s2x:-50%;--p1x:-50%;--p2x:-50%}}
+/* toa cứu hộ trong thẻ câu hỏi */
+.toa-row{align-items:center;gap:8px 10px}
+.toa-train{display:flex;align-items:flex-end;gap:0;padding:2px 0 4px;overflow-x:auto;max-width:100%}
+.toa-car{position:relative;display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:6px 10px 10px;border:1.5px solid var(--tc);border-top-width:5px;border-radius:9px 9px 6px 6px;background:color-mix(in srgb,var(--surface) 92%,var(--tc));color:var(--fg);font:700 12.5px var(--body);cursor:pointer;white-space:nowrap;transition:transform .18s ease,box-shadow .18s ease}
+.toa-car:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 10px color-mix(in srgb,var(--tc) 35%,transparent)}
+.toa-car:active:not(:disabled){transform:translateY(1px) scale(.98)}
+.toa-car:disabled{opacity:.5;cursor:default}
+.toa-car:focus-visible{outline:3px solid var(--tc);outline-offset:2px}
+.toa-ic{display:inline-flex}
+.toa-w{position:absolute;bottom:-6px;left:9px;width:10px;height:10px;border-radius:50%;background:#24305e;border:2px solid #c9ccd8}
+.toa-w.r{left:auto;right:9px}
+.toa-hook{width:10px;height:3px;background:#24305e;margin-bottom:12px;flex:none}
+.toa-gap{display:inline-flex;align-items:center;justify-content:center;width:64px;min-height:44px;border:1.5px dashed var(--line);border-radius:9px;opacity:.6}
+.toa-gap i{width:70%;height:0;border-top:2px dotted var(--muted,#8a93b5)}
+.toa-loco{display:inline-flex;margin-bottom:2px}
+.toa-note{flex-basis:100%;font-size:12.5px;font-weight:600;color:var(--warn,#b9770e)}
+.toa-note.stop{color:#c0392b}
+.toa-fbok{color:#1f9d5c}.toa-fbstop{color:#c0392b}
+/* toa vừa đứt: tụt lại phía sau rồi biến mất */
+.toa-ghost{position:fixed;z-index:60;pointer-events:none;animation:toaRoi 1.05s cubic-bezier(.4,.1,.8,.6) forwards}
+.toa-ghost .toa-car{width:100%;height:100%;box-sizing:border-box}
+@keyframes toaRoi{0%{transform:none;opacity:1}25%{transform:translateX(-18px) rotate(-3deg)}100%{transform:translateX(-200px) translateY(26px) rotate(-12deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.toa-ghost{animation:none;opacity:0}}
 .combostone{padding:6px 10px;border-radius:10px;background:color-mix(in srgb,#8fb0d8 22%,transparent)}
 .ftools{display:flex;flex-wrap:wrap;gap:6px}
 .tchip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
@@ -3839,7 +3866,7 @@ window.kqSummary=kqSummary;
 (function(){const CFG=window.CGT_SYNC;if(!CFG||!CFG.clientId||!CFG.relay)return;
 const SK='cgt-sync',OWN='cgt-owner',TOUCH='cgt-touch',PEND='cgt-sync-pending',PH='cgt-phien',DIRTY='cgt-dirty',MAY='cgt-may';
 /* PH: số phiên bản trên kho mà máy này đang dựa vào (trạm tự đánh số, không tin đồng hồ máy). DIRTY: máy có thay đổi chưa gửi. */
-const SKIP=k=>!k.startsWith('cgt-')||k===SK||k===PEND||k===PH||k===DIRTY||k===MAY||k==='cgt-face'||k==='cgt-facepos';
+const SKIP=k=>!k.startsWith('cgt-')||k===SK||k===PEND||k===PH||k===DIRTY||k===MAY||k==='cgt-ten'||k==='cgt-face'||k==='cgt-facepos';
 const nowISO=()=>new Date().toISOString();
 let armed=false;/* chỉ tính là "có thay đổi" sau khi đã nạp xong, để các lần lưu lúc khởi động không làm bản cũ trông mới hơn */
 const _fsS=fSave;fSave=function(){_fsS();if(armed){LS.set(TOUCH,nowISO());LS.set(DIRTY,'1')}};
@@ -3869,7 +3896,7 @@ let gsiReady=null;
 function loadGsi(){if(gsiReady)return gsiReady;gsiReady=new Promise((ok,no)=>{if(window.google&&google.accounts&&google.accounts.id)return ok();const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=()=>ok();s.onerror=()=>{gsiReady=null;no()};document.head.appendChild(s)});return gsiReady}
 function renderBtn(){loadGsi().then(()=>{google.accounts.id.initialize({client_id:CFG.clientId,callback:r=>login(r.credential),auto_select:false});const el=document.getElementById('gsiBtn');if(el)google.accounts.id.renderButton(el,{theme:'outline',size:'medium',text:'signin_with',locale:'vi'})}).catch(()=>show('err','Không tải được nút đăng nhập Google. Kiểm tra mạng rồi tải lại trang.'))}
 const hhmm=()=>{const d=new Date();return d.getHours()+':'+String(d.getMinutes()).padStart(2,'0')};
-async function login(cred){try{sessionStorage.setItem('cgt-welcomed','1')}catch(e){}show('busy','Đang đăng nhập…');try{const r=await call({op:'login',idToken:cred});if(!r.ok)throw new Error(r.err);
+async function login(cred){try{const pl=JSON.parse(decodeURIComponent(escape(atob(cred.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));const ten=(pl.name||String(pl.email||'').split('@')[0]||'').slice(0,40);if(ten)localStorage.setItem('cgt-ten',ten)}catch(e){}try{sessionStorage.setItem('cgt-welcomed','1')}catch(e){}show('busy','Đang đăng nhập…');try{const r=await call({op:'login',idToken:cred});if(!r.ok)throw new Error(r.err);
   LS.set(SK,r.session);const prevOwner=LS.get(OWN,'');LS.set(OWN,r.hash);
   if(prevOwner&&prevOwner!==r.hash){if(r.data)return applyRemote(r.data);window.__cgtLeaving=true;wipeLocal();LS.set(SK,r.session);LS.set(OWN,r.hash);return location.reload()}
   /* máy chưa có chủ: tiến độ trên mạng luôn thắng, tránh bản mới tinh đè lên thành tích cũ */
@@ -4564,9 +4591,9 @@ try{const mi=document.querySelector('#menu .menu-in');if(mi)mi.insertAdjacentHTM
 FG.roiTab=FG.roiTab||{};
 const qcardEl=document.getElementById('card');
 const wmEl=document.createElement('div');wmEl.className='wmark';wmEl.setAttribute('aria-hidden','true');
-function wmText(){let who='khách';try{const o=localStorage.getItem('cgt-owner');if(o)who='mã '+o.slice(0,6)}catch(e){}const d=new Date(),p=n=>String(n).padStart(2,'0');return`Vua Tin Học · ${who} · ${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}`}
-function wmPaint(){const t=wmText();if(wmEl.dataset.t===t&&wmEl.isConnected)return;wmEl.dataset.t=t;
-  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='300' height='150'><text x='0' y='90' transform='rotate(-22 150 75)' font-family='sans-serif' font-size='13' fill='%23808080'>${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text></svg>`;
+function wmText(){let who='khách';try{const n=localStorage.getItem('cgt-ten'),o=localStorage.getItem('cgt-owner');if(n)who=n;else if(o)who='mã '+o.slice(0,6)}catch(e){}const d=new Date(),p=n=>String(n).padStart(2,'0');return`Vua Tin Học · ${who} · ${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}`}
+function wmPaint(){const t=wmText(),k2=document.body.classList.contains('kd-2'),key=t+(k2?'|2':'');if(wmEl.dataset.t===key&&wmEl.isConnected)return;wmEl.dataset.t=key;
+  const W=k2?230:300,H=k2?100:150;const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'><text x='0' y='${H*.6}' transform='rotate(-22 ${W/2} ${H/2})' font-family='sans-serif' font-size='${k2?15:13}' font-weight='${k2?700:400}' fill='%23808080'>${t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text></svg>`;
   wmEl.style.backgroundImage=`url("data:image/svg+xml;utf8,${svg.replace(/#/g,'%23')}")`;if(!wmEl.isConnected)qcardEl.appendChild(wmEl)}
 const _rcA=renderCard;renderCard=function(){const r=_rcA.apply(this,arguments);try{wmPaint()}catch(e){}return r};
 /* không cho bôi đen, sao chép nội dung câu hỏi */
@@ -4576,6 +4603,8 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState!==
 addEventListener('blur',()=>{/* chuyển cửa sổ trên máy tính */if(document.visibilityState==='visible'&&RUN.phase==='answer'&&wcEl.hidden){RUN.blur=(RUN.blur||0)+1}});
 const _finA=forgeOnFinish;forgeOnFinish=function(){_finA();const n=(RUN.leave||0);if(n>0){const box=card.querySelector('.result .top');if(box)box.insertAdjacentHTML('afterend',`<p class="leavenote">Trong lượt này em đã rời trang ${n} lần khi đang trả lời. Số lần rời trang được ghi vào kết quả để thầy cô xem.</p>`)}};
 try{wmPaint()}catch(e){}setInterval(()=>{try{wmPaint()}catch(e){}},30000);
+
+window.wmPaint=wmPaint;
 
 /* ================= GIÓ THEO CHUỖI ĐÚNG + ĂN MỪNG VỀ ĐÍCH CHỈ NHÂN VẬT CHUYỂN ĐỘNG ================= */
 /* đúng liên tiếp 2 / 3 / 5 câu: gió cấp 1 / 2 / 3, cảnh chạy nhanh dần, khói nghiêng dần; sai thì gió lặng */
@@ -4931,20 +4960,227 @@ const _iwA=itemWear;itemWear=function(c,G,o,l,ev,t){if(!POSE||POSE.k!=='throw')r
 const _dhA=drawHero;drawHero=function(c,s,h,hh,hw){if(h&&h.land&&h.pose&&!h.ride){POSE=h.pose;try{return _dhA.apply(this,arguments)}finally{POSE=null}}return _dhA.apply(this,arguments)};
 })();
 
-/* ================= CHỮ "SÓNG": câu hỏi và phương án mờ rõ theo làn sóng, chống chụp màn hình nhờ AI giải ================= */
-(function(){const KEY='cgt-song';let lv=LS.get(KEY,TEST_MODE?'0':'1');
+/* ================= CHỮ "SÓNG": con trỏ đọc trôi theo dòng chữ; ngoài con trỏ, chữ bị xáo trộn và mờ
+   Mỗi khối chữ (câu hỏi, từng phương án) có một "cửa sổ" vài chục ký tự trôi từ đầu đến cuối rồi lặp lại.
+   Trong cửa sổ: chữ đúng, rõ. Ngoài cửa sổ: ký tự bị thay bằng chữ cái khác của chính khối đó, liên tục đổi chỗ.
+   Ảnh chụp màn hình chỉ có vài mẩu chữ đúng giữa một biển chữ xáo, AI không đọc ra đề. Mắt người đọc theo con trỏ. */
+(function(){const KEY='cgt-song';let lv='0'; /* 03/11: thầy bỏ chế độ lật chữ vì rối mắt */
   const card=document.getElementById('card'),body=document.body;
-  function apply(){body.classList.remove('wv-1','wv-2');if(lv!=='0')body.classList.add('wv-'+lv);sync()}
-  function onCard(){if(!card)return;const on=lv!=='0'&&RUN&&RUN.phase==='answer';card.classList.toggle('wv-on',!!on)}
+  const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* W: số ký tự rõ cùng lúc · V: ký tự/giây · O: độ đậm chữ xáo */
+  const CF={'1':{W:24,V:15,O:.32},'2':{W:14,V:12,O:.2}};
+  let G=[],raf=0,clk=0,last=0,mix=0,hold=false;
+  const isTxt=c=>/[\p{L}\p{N}]/u.test(c);
+  function wrap(){G=[];if(lv==='0'||!card)return;
+    const roots=[...card.querySelectorAll('.bubble .q'),document.getElementById('qbody')].filter(Boolean);
+    const groups=new Map();
+    roots.forEach(root=>{const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||!n.nodeValue.trim()&&!n.nodeValue.includes(' '))return 2;
+        if(p.closest('svg,input,textarea,script,style,[data-nowave],.opt>b'))return 2;return 1}});
+      const nodes=[];while(tw.nextNode())nodes.push(tw.currentNode);
+      nodes.forEach(n=>{const p=n.parentElement;
+        if(p.classList.contains('wcw'))return;if(p.classList.contains('wc')){const blk=p.closest('button,li,label,p,td,th,.chip')||root;(groups.get(blk)||groups.set(blk,[]).get(blk)).push(p);return}
+        const blk=p.closest('button,li,label,p,td,th,.chip');const key=blk&&root.contains(blk)?blk:root;
+        const s=n.nodeValue.normalize('NFC'),f=document.createElement('span'),arr=groups.get(key)||groups.set(key,[]).get(key);
+        for(const ch of s){if(ch===' '||ch==='\n'||ch==='\t'){f.appendChild(document.createTextNode(ch));continue}
+          const sp=document.createElement('span');sp.className='wc';sp.textContent=ch;f.appendChild(sp);arr.push(sp)}
+        f.className='wcw';n.parentNode.replaceChild(f,n)})});
+    let off=0;groups.forEach(sp=>{if(sp.length<8)return; /* nhãn ngắn (A, B, Đúng, Sai) giữ nguyên để chọn */const pool=sp.map(x=>x.textContent).filter(isTxt);
+      G.push({sp,pool:pool.length?pool:['x'],a:-1,b:-1,off});off+=7});
+    G.forEach(g=>g.sp.forEach(s=>s.classList.add('o')));scramble(true);tick(performance.now())}
+  function scramble(all){G.forEach(g=>g.sp.forEach((s,i)=>{if(!all&&!s.classList.contains('o'))return;const c=s.textContent;
+    s.dataset.s=isTxt(c)?g.pool[(Math.random()*g.pool.length)|0]:c}))}
+  function tick(t){raf=0;if(!card.classList.contains('wv-on')||!G.length)return;
+    const dt=last?Math.min(.1,(t-last)/1000):0;last=t;if(!hold)clk+=dt;
+    const c=CF[lv]||CF['1'];
+    G.forEach(g=>{const L=g.sp.length,span=L+c.W,p=((clk*c.V+g.off)%span)-c.W;   /* cửa sổ [p, p+W) */
+      const a=Math.max(0,Math.floor(p)),b=Math.min(L,Math.floor(p+c.W));
+      if(a===g.a&&b===g.b)return;
+      for(let i=Math.min(a,g.a<0?a:g.a);i<Math.max(b,g.b);i++){const s=g.sp[i];if(!s)continue;const inW=i>=a&&i<b;
+        s.classList.toggle('o',!inW);s.classList.toggle('e',inW&&(i<a+2||i>=b-2))}
+      g.a=a;g.b=b});
+    if(!RM&&t-mix>340){mix=t;scramble(false)}
+    raf=requestAnimationFrame(tick)}
+  function apply(){body.classList.remove('wv-1','wv-2');if(lv!=='0')body.classList.add('wv-'+lv);body.style.setProperty('--wo',(CF[lv]||CF['1']).O);sync()}
+  function onCard(){if(!card)return;const on=lv!=='0'&&RUN&&RUN.phase==='answer';card.classList.toggle('wv-on',!!on);
+    if(on){wrap();last=0;if(!raf)raf=requestAnimationFrame(tick)}}
   const _rcS=renderCard;renderCard=function(){const r=_rcS.apply(this,arguments);try{onCard()}catch(e){}return r};
   const _rbS=refreshBody;refreshBody=function(){const r=_rbS.apply(this,arguments);try{onCard()}catch(e){}return r};
-  /* chạm giữ: tạm dừng sóng để chọn cho dễ (không hiện rõ toàn bộ) */
-  if(card){card.addEventListener('pointerdown',()=>card.classList.add('wv-hold'));addEventListener('pointerup',()=>card.classList.remove('wv-hold'));addEventListener('pointercancel',()=>card.classList.remove('wv-hold'))}
-  const seg=document.getElementById('segSky'),box=seg&&seg.closest('.set');
-  if(box){const a=document.getElementById('segToa')?document.getElementById('segToa').closest('.set'):box;a.insertAdjacentHTML('afterend',`<div class="set"><b>Chữ sóng chống chụp màn hình</b><div class="seg" id="segSong" role="group" aria-label="Chữ sóng"><button type="button" data-v="0">Tắt</button><button type="button" data-v="1">Nhẹ</button><button type="button" data-v="2">Mạnh</button></div><small>Chỉ một dải chữ hiện ra và trôi qua, phần còn lại hoà hẳn vào nền: mắt đọc theo dải sóng, ảnh chụp màn hình chỉ có một mảnh chữ. Nhẹ: dải rộng. Mạnh: dải hẹp. Giữ tay trên thẻ để dừng sóng. Tự tắt khi xem lời giải.</small></div>`);
-    document.querySelectorAll('#segSong button').forEach(b=>b.onclick=()=>{lv=b.dataset.v;LS.set(KEY,lv);apply();onCard()})}
+  /* chạm giữ: con trỏ đứng lại để đọc kĩ chỗ đó (phần còn lại vẫn xáo) */
+  if(card){card.addEventListener('pointerdown',()=>{hold=true;card.classList.add('wv-hold')});
+    const up=()=>{hold=false;card.classList.remove('wv-hold')};addEventListener('pointerup',up);addEventListener('pointercancel',up)}
   function sync(){document.querySelectorAll('#segSong button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===lv))}
   apply();setTimeout(onCard,0)})();
+/* ================= KẺ DÒNG CHỐNG AI: đường kẻ mảnh chạy ở đỉnh chữ thường (x-height) và chân chữ (baseline)
+   u/ư, m/n, o/ơ… dính vào đường kẻ, máy đọc chữ khó tách nét. Kèm dấu tên + giờ đậm hơn trên thẻ. */
+(function(){const KEY='cgt-kd';let lv=LS.get(KEY,'1');
+  const card=document.getElementById('card'),body=document.body;
+  /* đo trực tiếp trên trang: vùng chữ của mảnh inline, đường chân chữ, đỉnh chữ thường (qua vertical-align: middle) */
+  function metrics(el){try{const t=document.createElement('span');t.className='kd-probe';t.innerHTML='Hx<i style="display:inline-block;width:0;height:0;vertical-align:baseline"></i><i style="display:inline-block;width:0;height:0;vertical-align:middle"></i>';
+      el.appendChild(t);const r=t.getBoundingClientRect(),bl=t.children[0].getBoundingClientRect().bottom,mid=t.children[1].getBoundingClientRect().top,T=r.height||1;
+      const xTop=bl-2*(bl-mid),A=bl-r.top;t.remove();
+      el.style.setProperty('--kb',(A/T*100).toFixed(1)+'%');el.style.setProperty('--kx',((xTop-r.top)/T*100).toFixed(1)+'%');
+      const kc=Math.max(0,(xTop-r.top)-(bl-xTop)*.42)/T*100;el.style.setProperty('--kc',kc.toFixed(1)+'%');
+      el._kd={x:(xTop-r.top)/T*100,b:A/T*100,c:kc,px:100/T,p:[Math.random()*7,Math.random()*7,Math.random()*7,Math.random()*7],f:[1.3+Math.random(),1.7+Math.random(),.6+Math.random()*.5,2.1+Math.random()]};KP.add(el)}catch(e){}}
+  /* đường kẻ chuyển động ngẫu nhiên quanh chân chữ và đỉnh chữ thường; thêm một đường lang thang ở nửa dưới con chữ */
+  const KP=new Set(),RMk=matchMedia('(prefers-reduced-motion: reduce)').matches;let kraf=0;
+  function kAnim(now){kraf=0;if(!card.classList.contains('kd-on'))return;const t=now/1000,A=lv==='2'?2.2:1.6;
+    KP.forEach(el=>{if(!el.isConnected){KP.delete(el);return}const k=el._kd,j=i=>(Math.sin(t*k.f[i]+k.p[i])*.62+Math.sin(t*k.f[i]*2.3+k.p[i]*1.7)*.38);
+      const y1=k.x+j(0)*A*k.px,y2=k.b+j(1)*A*k.px,w=.5+.45*Math.sin(t*k.f[2]+k.p[2])+.12*Math.sin(t*k.f[2]*3.1+k.p[3]),y3=k.x+(k.b+1.5*k.px-k.x)*Math.min(1.05,Math.max(.2,w)),y4=k.c+j(3)*A*.7*k.px;
+      el.style.setProperty('--k1',y1.toFixed(2)+'%');el.style.setProperty('--k2',y2.toFixed(2)+'%');el.style.setProperty('--k3',y3.toFixed(2)+'%');el.style.setProperty('--k4',y4.toFixed(2)+'%');
+      /* pháo hoa: 2 vệt mỗi hàng – một ở lề trên (đỉnh chữ hoa), một ở lề dưới (chân chữ); đầu lấp lánh, đuôi dài mờ dần,
+         đuôi chạy chậm hơn đầu một chút và nằm đúng tâm của đầu pháo */
+      const dt=Math.min(.1,k.lt?t-k.lt:0);k.lt=t;if(!k.s)k.s=[sNew(-.1-Math.random()*.6,0),sNew(-.5-Math.random()*.8,1)];
+      const T=100/k.px,big=lv==='2',ph=big?9:7,th=big?3:2,sw=big?.70:.64,LANE=[k.b,k.c];
+      k.s.forEach((s,i)=>{s.x+=s.v*dt;if(s.x>1.25+sw){k.s[i]=s=sNew(-.2-Math.random()*.9,s.l)}
+        const Y=LANE[s.l]/100*T,n=i+1,head=s.x,tailEnd=head-.012-Math.min(.05,s.age=(s.age||0)+dt)*.25;   /* đuôi trễ sau đầu */
+        const pT=(tailEnd-sw)/(1-sw);                                   /* vị trí % của ảnh đuôi để mép phải = tailEnd */
+        el.style.setProperty('--s'+n+'x',(pT*100).toFixed(2)+'%');el.style.setProperty('--s'+n+'y',(Y-th/2).toFixed(2)+'px');
+        el.style.setProperty('--p'+n+'x',(head*100).toFixed(2)+'%');el.style.setProperty('--p'+n+'y',(Y-ph/2).toFixed(2)+'px');el.style.setProperty('--h'+n,s.h)})});
+    if(!RMk)kraf=requestAnimationFrame(kAnim)}
+  function sNew(x,l){return{x,v:.3+Math.random()*.4,l:l||0,h:[40,200,320,140,10,270][(Math.random()*6)|0]}}
+  function kStart(){if(!kraf)kraf=requestAnimationFrame(kAnim)}
+  function mark(){if(lv==='0'||!card)return;
+    const roots=[...card.querySelectorAll('.bubble .q'),document.getElementById('qbody')].filter(Boolean);
+    roots.forEach(root=>{root.querySelectorAll('.wcw').forEach(w=>w.classList.add('kd'));
+      const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||!n.nodeValue.trim())return 2;
+        if(p.closest('svg,input,textarea,script,style,.wcw,.kd,.opt>b'))return 2;return 1}});
+      const nodes=[];while(tw.nextNode())nodes.push(tw.currentNode);
+      nodes.forEach(n=>{const s=document.createElement('span');s.className='kd';n.parentNode.replaceChild(s,n);s.appendChild(n)});
+      const seen=new Set();root.querySelectorAll('.kd').forEach(k=>{const p=k.parentElement;if(p&&!seen.has(p)){seen.add(p);metrics(p)}})})}
+  function onCard(){if(!card)return;const on=lv!=='0'&&RUN&&RUN.phase==='answer';card.classList.toggle('kd-on',!!on);if(on){mark();kStart()}}
+  function apply(){body.classList.remove('kd-1','kd-2');if(lv!=='0')body.classList.add('kd-'+lv);try{window.wmPaint&&wmPaint()}catch(e){}sync()}
+  const _rcK=renderCard;renderCard=function(){const r=_rcK.apply(this,arguments);try{onCard()}catch(e){}return r};
+  const _rbK=refreshBody;refreshBody=function(){const r=_rbK.apply(this,arguments);try{onCard()}catch(e){}return r};
+  const s=document.getElementById('segToa')||document.getElementById('segSky'),box=s&&s.closest('.set');
+  if(box){box.insertAdjacentHTML('afterend',`<div class="set"><b>Pháo hoa chống AI đọc chữ</b><div class="seg" id="segKd" role="group" aria-label="Pháo hoa"><button type="button" data-v="0">Tắt</button><button type="button" data-v="1">Nhẹ</button><button type="button" data-v="2">Rõ</button></div><small>Mỗi hàng chữ của câu hỏi và phương án có một vệt pháo hoa phóng ngang sát chân chữ, đầu lấp lánh, đuôi mờ dần, che nét ngang ở đáy chữ (m/n/u/h). Tên đăng nhập và giờ in mờ đè lên thẻ. Rõ: vệt dày hơn, dấu tên đậm hơn.</small></div>`);
+    document.querySelectorAll('#segKd button').forEach(b=>b.onclick=()=>{lv=b.dataset.v;LS.set(KEY,lv);apply();onCard()})}
+  function sync(){document.querySelectorAll('#segKd button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===lv))}
+  apply();setTimeout(onCard,0)})();
+
+/* ================= TOA CỨU HỘ: 50:50, Giáo sư AI, Đổi câu là 3 toa nối sau đoàn tàu (mục 31)
+   - Mỗi lượt 10 câu bắt đầu với đủ 3 toa. Bấm toa nào: dùng trợ giúp đó, toa đứt móc, tụt lại phía sau.
+   - Hết cả 3 toa: nhân vật nhảy xuống, chạy bộ bên đầu máy (phía gần người xem), mệt, mồ hôi, rưng rưng, thỉnh thoảng rơi
+     mũ / giày / đồ cầm tay (quần áo giữ nguyên).
+   - Đang chạy bộ mà trả lời đúng (câu không dùng toa nào): một toa quay lại nối vào, nhân vật nhảy lên tàu, đồ rơi bay về.
+   - Đang chạy bộ mà sai hẳn (sai cả lần thử lại): tàu DỪNG, phải làm lại câu sai đó cho đúng rồi tàu mới chạy tiếp. */
+(function(){
+const ORDER=['swap','prof','f50'];               /* từ đuôi lên đầu: toa gần đầu máy nhất là 50:50 */
+const TOA_COL={f50:'#2f7fd8',prof:'#7b5cff',swap:'#e0782f'},TOA_TXT={f50:'50:50',prof:'GS AI',swap:'ĐỔI'};
+const RMt=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const T={anim:{},hc:{mode:'seat',t:0},parts:[],lost:[],hide:{},G:null,col:{},drop:0,stopMsg:0};
+window.__toa=T;
+const has=id=>RUN&&RUN.toa&&RUN.toa[id];
+const left=()=>ORDER.filter(has).length;
+
+/* ---------- trạng thái theo lượt ---------- */
+const _stT=start;start=function(){const r=_stT.apply(this,arguments);RUN.toa={f50:true,prof:true,swap:true};RUN.toaLost=[];RUN.chay=false;RUN.dung=false;T.anim={};T.lost.forEach(o=>o.back=true);T.hide={};T.hc={mode:'seat',t:0};try{renderCard()}catch(e){}return r};
+
+/* ---------- hàng toa trong thẻ câu hỏi (thay 3 nút đạo cụ cũ) ---------- */
+const IC={f50:TOOL_IC.f50,prof:TOOL_IC.prof,swap:TOOL_IC.swap};
+const _thT=toolsHTML;toolsHTML=function(q){if(!RUN||!RUN.toa)return _thT.apply(this,arguments);
+  const used=RUN.st.used||[],cars=ORDER.map(id=>{const t=TOOLS.find(x=>x.id===id),bad=(q.bt&&id==='swap')||used.includes(id)||RUN.phase!=='answer';
+      if(!RUN.toa[id])return`<span class="toa-gap" title="Toa ${t.name} đã đứt, trả lời đúng khi đang chạy bộ để nối lại"><i></i></span>`;
+      return`<button type="button" class="toa-car" data-tool="${id}" style="--tc:${TOA_COL[id]}" title="${t.tip}${q.bt&&id==='swap'?' (không dùng cho câu đột phá)':''}" ${bad?'disabled':''}><span class="toa-ic">${IC[id]}</span><span class="toa-nm">${t.name}</span><i class="toa-w"></i><i class="toa-w r"></i></button>`}).join('<span class="toa-hook" aria-hidden="true"></span>');
+  const sk=TOOLS.find(x=>x.id==='skip'),n=FG.tools.skip,skBad=q.bt||used.includes('skip');
+  const note=RUN.dung?'<span class="toa-note stop">Tàu đang dừng: làm đúng câu này để chạy tiếp</span>':RUN.chay?'<span class="toa-note">Hết toa cứu hộ, em đang chạy bộ theo tàu. Trả lời đúng để nối lại một toa</span>':'';
+  return`<div class="tools toa-row" role="group" aria-label="Toa cứu hộ"><div class="toa-train">${cars}<span class="toa-hook" aria-hidden="true"></span><span class="toa-loco" aria-hidden="true"><svg viewBox="0 0 40 26" width="40" height="26"><rect x="2" y="9" width="26" height="12" rx="4" fill="#2f6fe0"/><rect x="20" y="3" width="14" height="18" rx="3" fill="#2a5bc4"/><rect x="8" y="3" width="5" height="7" rx="1" fill="#1d3f8f"/><circle cx="10" cy="22" r="3.4" fill="#24305e"/><circle cx="26" cy="22" r="3.4" fill="#24305e"/><rect x="23" y="7" width="8" height="6" rx="1.5" fill="#cfe6ff"/></svg></span></div>
+    <button type="button" class="tool" data-tool="skip" title="${sk.tip}${q.bt?' (không dùng cho câu đột phá)':''}" ${n<1||skBad||RUN.phase!=='answer'?'disabled':''}>${TOOL_IC.skip}<span>${sk.name}</span><b>${n}</b></button>${note}</div>`};
+
+/* ---------- dùng toa: không trừ kho đạo cụ, toa đứt và tụt lại ---------- */
+const _utT=useTool;useTool=function(id){if(!RUN||!RUN.toa||!ORDER.includes(id))return _utT.apply(this,arguments);
+  if(!RUN.toa[id]||RUN.phase!=='answer')return;const st=RUN.st;if((st.used||[]).includes(id))return;if(RUN.list[RUN.idx].bt&&id==='swap')return;
+  const btn=document.querySelector(`#card .toa-car[data-tool="${id}"]`),rect=btn&&btn.getBoundingClientRect(),html=btn&&btn.outerHTML;
+  const keep=FG.tools[id];FG.tools[id]=Math.max(1,keep||0);
+  try{_utT.apply(this,arguments)}finally{FG.tools[id]=keep;try{fSave()}catch(e){}}
+  RUN.toa[id]=false;RUN.toaLost.push(id);if(left()===0)RUN.chay=true;
+  T.anim[id]={mode:'roi',x:null,t:0};
+  if(rect&&html&&!RMt){const g=document.createElement('div');g.className='toa-ghost';g.innerHTML=html;g.style.left=rect.left+'px';g.style.top=rect.top+'px';g.style.width=rect.width+'px';g.style.height=rect.height+'px';document.body.appendChild(g);setTimeout(()=>g.remove(),1100)}
+  try{SND.no&&0}catch(e){}
+  if(RUN.chay)setTimeout(()=>toast('Hết toa cứu hộ! Nhảy xuống chạy theo tàu, trả lời đúng để nối toa lại'),350);
+  try{renderCard()}catch(e){}};
+
+/* ---------- sau khi chấm: nối toa / dừng tàu ---------- */
+const _acT=afterCheck;afterCheck=function(q){_acT.apply(this,arguments);if(!RUN||!RUN.toa||RUN.phase!=='done')return;
+  const r=RUN.res[RUN.idx],good=r==='ok'||r==='fix';
+  const usedToa=(RUN.st.used||[]).some(x=>ORDER.includes(x));
+  if(RUN.chay&&good&&!usedToa){const id=RUN.toaLost.shift();if(id){RUN.toa[id]=true;T.anim[id]={mode:'ve',x:null,t:0}}RUN.chay=false;
+    if(RUN.dung){RUN.dung=false;if(RUN.fb)RUN.fb.title+=' · Tàu chạy tiếp!'}
+    if(RUN.fb)RUN.fb.text+=' <b class="toa-fbok">Một toa cứu hộ đã nối lại, em nhảy lên tàu!</b>'}
+  else if(RUN.chay&&r==='miss'){RUN.dung=true;if(RUN.fb){RUN.fb.title='Tàu dừng lại!';RUN.fb.text+=' <b class="toa-fbstop">Đã hết toa cứu hộ mà vẫn sai: tàu dừng. Bấm Tiếp tục để làm lại câu này, làm đúng thì tàu mới chạy tiếp.</b>'}}};
+/* tàu dừng: câu tiếp theo là câu vừa sai, làm lại; tàu đứng yên */
+const _nxT=next;next=function(){if(RUN&&RUN.dung&&RUN.phase==='done'){const q=RUN.list[RUN.idx];
+    const rq=Object.assign({},q,{w:Math.max(.5,q.w*.5),lamlai:true,kind:'Làm lại khi tàu dừng · '+(q.kind||'')});RUN.list.splice(RUN.idx+1,0,rq);
+    const ja=window.jAdvance;jAdvance=function(){};try{_nxT.apply(this,arguments)}finally{jAdvance=ja}try{renderBar(false)}catch(e){}return}
+  return _nxT.apply(this,arguments)};
+const _juT=jUpdate;jUpdate=function(dt){if(RUN&&RUN.dung&&!J.fin){const w=J.world;J.travel=null;const r=_juT.apply(this,arguments);J.world=w;J.speed=0;return r}return _juT.apply(this,arguments)};
+
+/* ---------- vẽ: toa cứu hộ trên cảnh ---------- */
+function carAt(id,cx,y0,s,tilt){const c=J.c,w=44*s,h=26*s,col=TOA_COL[id];c.save();if(tilt){c.translate(cx+w/2,y0);c.rotate(tilt);c.translate(-cx-w/2,-y0)}
+  c.fillStyle='#fff7ea';rr(cx,y0-h-10*s,w,h,4*s);c.fill();c.fillStyle=col;rr(cx-1.5*s,y0-h-13*s,w+3*s,6*s,3*s);c.fill();c.fillRect(cx,y0-16*s,w,3.5*s);
+  c.fillStyle=col;c.font=`800 ${Math.round(9.5*s)}px system-ui,sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText(TOA_TXT[id],cx+w/2,y0-h*.62-4*s);
+  c.fillStyle='#24305e';c.fillRect(cx+w,y0-16*s,6*s,2.5*s);c.restore();wheel(cx+10*s,GEO().ry-6*s,5.5*s);wheel(cx+w-10*s,GEO().ry-6*s,5.5*s)}
+let lastT=0;
+function drawSupport(){if(!RUN||!RUN.toa||!J.W)return;const s=S(),{ry}=GEO(),x0=trainX(),mv=J.speed>30*s,bob=(mv?Math.sin(J.t*9)*.8:bounce()*-.9)*s,y0=ry-3*s+bob;
+  const dt=lastT?Math.min(.1,J.t-lastT):0;lastT=J.t;
+  const tail=x0-84*s-2*70*s;
+  ORDER.slice().reverse().forEach((id,j)=>{const slot=tail-(j+1)*52*s,a=T.anim[id];
+    if(RUN.toa[id]&&(!a||a.mode!=='ve')){carAt(id,slot,y0,s,0);return}
+    if(!a)return;a.t+=dt;
+    if(a.mode==='roi'){if(a.x==null){a.x=slot;a.v=0}a.v=Math.min(J.speed+40*s,a.v+(60*s+J.speed*.8)*dt);a.x-=a.v*dt;if(a.x>-80*s)carAt(id,a.x,ry-3*s,s,Math.sin(a.t*7)*.03*Math.min(1,a.t*2));else delete T.anim[id]}
+    else if(a.mode==='ve'){if(a.x==null){a.x=-70*s;a.v=0}const k=Math.min(1,a.t/1.4),e=1-Math.pow(1-k,3);a.x=-70*s+(slot+70*s)*e;carAt(id,a.x,y0,s,0);if(k>=1)delete T.anim[id]}})}
+
+/* ---------- nhân vật xuống chạy bộ / nhảy lên tàu ---------- */
+function seatPos(){const s=S(),{ry}=GEO(),x0=trainX(),mv=J.speed>30*s,bob=(mv?Math.sin(J.t*9)*.8:bounce()*-.9)*s,y0=ry-3*s+bob,hh=104*s*.82,roof=y0-50*s;return{x:x0-122*s,y:roof+(.9125-.47)*hh}}
+function runPos(){const s=S(),{ry}=GEO(),x0=trainX(),t=J.t,lag=RMt?0:Math.sin(t*.55)*18*s+Math.sin(t*1.7)*5*s;return{x:Math.max(40*s,x0-46*s+lag),y:ry+11*s}}
+function spawnP(o){T.parts.push(Object.assign({life:0},o))}
+const _hsT=heroSeat;heroSeat=function(){if(T.hc.mode!=='seat')return;return _hsT.apply(this,arguments)};
+function drawRunner(){if(!RUN||!RUN.toa||!J.W||(J.fin&&J.fin.t>=3.3))return;
+  const s=S(),hh=104*s*.82*1.06,hw=hh*130/160,dt=Math.min(.1,J.t-(T.hc.lt||J.t));T.hc.lt=J.t;T.hc.t+=dt;
+  const want=RUN.chay?'run':'seat',m=T.hc;
+  if(m.mode==='seat'&&want==='run'){m.mode='down';m.t=0}
+  if((m.mode==='run'||m.mode==='down')&&want==='seat'){m.mode='up';m.t=0;returnItems()}
+  if(m.mode==='seat'){drawParts(dt,s);return}
+  const A=seatPos(),B=runPos();let h,rot=0,sx=1,sy=1,feetY=B.y;
+  if(m.mode==='down'){const u=Math.min(1,m.t/.75),e=u*u*(3-2*u);h={x:A.x+(B.x-A.x)*e,y:A.y+(B.y-A.y)*u-Math.sin(Math.PI*u)*40*s};if(u>=1){m.mode='run';m.t=0;T.drop=J.t+4+Math.random()*3}}
+  else if(m.mode==='up'){const u=Math.min(1,m.t/.8),e=u*u*(3-2*u);h={x:B.x+(A.x-B.x)*e,y:B.y+(A.y-B.y)*u-Math.sin(Math.PI*u)*54*s};if(u>=1){m.mode='seat';drawParts(dt,s);return}}
+  else{const ph=J.t*(RMt?0:11),st=Math.abs(Math.sin(ph));h={x:B.x,y:B.y-st*7*s};rot=.1+Math.sin(ph*2)*.035;sy=1-(1-st)*.06;sx=1+(1-st)*.04;
+    /* mệt: mồ hôi, nước mắt, hơi thở */
+    if(!RMt){const G=T.G,mp=gp=>gp;if(Math.random()<dt*7)spawnP({k:'sweat',x:h.x+hw*(.08+Math.random()*.12),y:h.y-hh*.86,vx:-(30+Math.random()*30)*s,vy:-(30+Math.random()*25)*s});
+      if(Math.random()<dt*3)spawnP({k:'tear',x:h.x+hw*(Math.random()<.5?-.07:.07),y:h.y-hh*.74,vx:-55*s,vy:-8*s});
+      if(Math.random()<dt*2.2)spawnP({k:'puff',x:h.x+hw*.16,y:h.y-hh*.66,vx:20*s,vy:-6*s,r:3*s});
+      if(Math.random()<dt*9)spawnP({k:'dust',x:h.x-hw*.12,y:B.y-2*s,vx:-(J.speed*.6+20*s),vy:-10*s,r:2.5*s})}
+    if(J.t>T.drop)dropOne(h,hh,hw,s)}
+  const c=J.c;c.save();const dy=feetY-(GEO().ry-1*s);c.translate(0,dy);
+  T.drawing=true;try{drawHero(c,s,{x:h.x,y:h.y-dy,rot,sx,sy,land:false,ride:false,v:9},hh,hw)}finally{T.drawing=false}
+  c.restore();T.last={x:h.x,y:h.y,hh,hw};drawParts(dt,s)}
+/* toạ độ trên hình nhân vật (260x320) → toạ độ cảnh */
+function sp(gx,gy){const L=T.last;if(!L)return{x:0,y:0};return{x:L.x-L.hw/2+gx/260*L.hw,y:L.y-L.hh*.41-L.hh/2+gy/320*L.hh}}
+function dropOne(h,hh,hw,s){T.drop=J.t+5+Math.random()*4;const pool=['hat','item','shoe'].filter(k=>!T.hide[k]&&T.col[k]);if(!pool.length||!T.G)return;
+  const k=pool[(Math.random()*pool.length)|0],G=T.G,at=k==='hat'?sp(G.cx,G.headY-G.headR):k==='item'?sp(G.RH.x,G.RH.y):sp(G.cx+13,G.footY);
+  T.hide[k]=true;T.lost.push({k,col:T.col[k],x:at.x,y:at.y,vx:-25*s,vy:-90*s,rot:0,vr:(Math.random()-.5)*8,ground:runPos().y,back:false,bt:0});
+  toast(k==='hat'?'Ôi, rơi mất mũ rồi!':k==='shoe'?'Ôi, tuột mất giày!':'Ôi, đánh rơi đồ cầm tay!')}
+function returnItems(){T.lost.forEach(o=>{o.back=true;o.bt=0;o.fx=o.x;o.fy=o.y})}
+function drawItem(c,o,s){c.save();c.translate(o.x,o.y);c.rotate(o.rot);c.fillStyle=o.col||'#c0392b';c.strokeStyle='rgba(0,0,0,.25)';c.lineWidth=1*s;
+  if(o.k==='hat'){c.beginPath();c.ellipse(0,2*s,11*s,3.2*s,0,0,7);c.fill();c.beginPath();c.arc(0,1*s,6.5*s,Math.PI,0);c.fill();c.stroke()}
+  else if(o.k==='shoe'){c.beginPath();c.moveTo(-7*s,-4*s);c.lineTo(1*s,-4*s);c.quadraticCurveTo(8*s,-2*s,8*s,2*s);c.lineTo(-7*s,2*s);c.closePath();c.fill();c.stroke()}
+  else{c.beginPath();c.moveTo(0,4*s);c.arc(0,4*s,10*s,Math.PI*1.15,Math.PI*1.85);c.closePath();c.fill();c.stroke();c.strokeStyle='rgba(255,255,255,.6)';for(let i=0;i<4;i++){const a=Math.PI*(1.2+i*.16);c.beginPath();c.moveTo(0,4*s);c.lineTo(Math.cos(a)*9*s,4*s+Math.sin(a)*9*s);c.stroke()}}
+  c.restore()}
+function drawParts(dt,s){const c=J.c;
+  T.parts.forEach(p=>{p.life+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.k==='puff'?-8:p.k==='dust'?20:160)*s*dt;const a=Math.max(0,1-p.life/(p.k==='puff'?.9:.7));
+    c.save();c.globalAlpha=a;if(p.k==='sweat'||p.k==='tear'){c.fillStyle=p.k==='tear'?'#8fd3ff':'#bfe8ff';c.beginPath();c.ellipse(p.x,p.y,1.6*s,2.6*s,0,0,7);c.fill()}
+    else{c.fillStyle=p.k==='dust'?'rgba(180,160,130,.7)':'rgba(255,255,255,.8)';c.beginPath();c.arc(p.x,p.y,(p.r||2*s)*(1+p.life*1.6),0,7);c.fill()}c.restore()});
+  T.parts=T.parts.filter(p=>p.life<1);
+  T.lost.forEach(o=>{if(o.back){o.bt+=dt;const u=Math.min(1,o.bt/.8),tg=T.last||seatPos(),tx=tg.x,ty=tg.y-(tg.hh||60*s)*.6;o.x=o.fx+(tx-o.fx)*u;o.y=o.fy+(ty-o.fy)*u-Math.sin(Math.PI*u)*60*s;o.rot+=o.vr*dt;if(u>=1){o.done=true;T.hide[o.k]=false}}
+    else{o.vy+=320*s*dt;o.x+=o.vx*dt-J.speed*dt;o.y+=o.vy*dt;o.rot+=o.vr*dt;if(o.y>o.ground){o.y=o.ground;o.vy*=-.35;o.vx*=.5;o.vr*=.5}}
+    drawItem(c,o,s)});
+  T.lost=T.lost.filter(o=>!o.done&&o.x>-400*s)}
+/* ---------- giấu đồ đã rơi khi vẽ người chạy; ghi màu đồ đang mặc ---------- */
+const _hwT=hatWear;hatWear=function(c,G,o){try{if(T.drawing){T.G=G;T.col.hat=colOf(o,'hat',G.P)}}catch(e){}if(T.drawing&&T.hide.hat)return;return _hwT.apply(this,arguments)};
+const _iwT=itemWear;itemWear=function(c,G,o){try{if(T.drawing){T.G=G;T.col.item=(o.col&&o.col.item)||'#d4a017'}}catch(e){}if(T.drawing&&T.hide.item)return;return _iwT.apply(this,arguments)};
+const _shT=shoes;shoes=function(c,G,o){try{if(T.drawing){T.G=G;T.col.shoe=colOf(o,'shoe',G.P)}}catch(e){}if(T.drawing&&T.hide.shoe)return;return _shT.apply(this,arguments)};
+/* đồ rơi chỉ giấu trên người chạy; khi đã ngồi lại trên tàu thì đồ đã bay về */
+const _trT=train;train=function(){const r=_trT.apply(this,arguments);try{drawSupport();drawRunner()}catch(e){}return r};
+})();
 
 </script>
 
