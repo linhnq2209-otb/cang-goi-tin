@@ -3,5 +3,5 @@
    relay:    địa chỉ Web app của trạm Apps Script (dạng https://script.google.com/macros/s/.../exec) */
 window.CGT_SYNC = {
   clientId: '944545775367-i4seb60oku45m50k7o34s9s80osd5he1.apps.googleusercontent.com',
-  relay: 'DÁN-ĐỊA-CHỈ-/https://script.google.com/macros/s/AKfycbzYZysocu3podIvF_zbsd0MQ_R174L7VmpiABeKBxvnyUWS7klaWQG0dIYSOqZYgIpF-g/exec'
+  relay: 'https://script.google.com/macros/s/AKfycbzYZysocu3podIvF_zbsd0MQ_R174L7VmpiABeKBxvnyUWS7klaWQG0dIYSOqZYgIpF-g/exec'
 };
