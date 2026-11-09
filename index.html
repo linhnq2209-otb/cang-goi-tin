@@ -1266,6 +1266,7 @@ html.hud-kihieu #knBtn,html.hud-kihieu #vnBtn,html.hud-kihieu #glassBtn{width:44
 @keyframes ccCau{from{transform:translateX(56px);opacity:0}to{transform:none;opacity:1}}
 #card.cc-cau{animation:ccCau .36s cubic-bezier(.2,.8,.2,1) both}
 @media (prefers-reduced-motion:reduce){.cc-the,#card.cc-cau{animation:none!important}}
+.cc-the.stg{animation:ccThe .42s cubic-bezier(.2,.9,.25,1.1) both!important;animation-delay:calc(var(--i,0) * 22ms)!important}
 /* phòng kỹ năng (07/11): tranh căn phòng dưới tiêu đề */
 .phong-bang{height:180px;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(20,40,90,.12);border:1px solid rgba(0,0,0,.06)}
 .phong-bang[hidden]{display:none}
@@ -6076,12 +6077,48 @@ function put(q,st,i){const e=st.slot.indexOf(null);if(e<0)return;st.slot[e]=i;st
 const _bb=bindBody;bindBody=function(q,st){if(!isS(q))return _bb.apply(this,arguments);if(RUN.phase!=='answer')return;const body=$('#qbody');
   body.querySelectorAll('[data-xt]').forEach(b=>b.onclick=()=>put(q,st,+b.dataset.xt));
   body.querySelectorAll('.xc-slot.full').forEach(b=>b.onclick=()=>{st.slot[+b.dataset.xs]=null;st.marks={};SND.tap();refreshBody()})};
+/* ---------- gõ phím (09/11): chịu được bộ gõ tiếng Việt (Unikey, Telex) ----------
+   - Bộ gõ gửi Xoá rồi chữ đã ghép (a + r → ả): nếu không có ô chữ ả thì tách lại thành A + R (người muốn gõ chữ R).
+   - Không bật bộ gõ: gõ a rồi f/s/r/x/j (hoặc aa, aw, ow, w, dd) để ghép thành à, á, ả, ã, ạ, â, ă, ơ, ư, đ khi có ô chữ đó.
+   - Mỗi lần gõ là một "cụm"; phím Xoá gỡ cả cụm vừa gõ, khớp cách bộ gõ xoá rồi gửi lại. */
+const TONE={S:'́',F:'̀',R:'̉',X:'̃',J:'̣'},TONEK={'́':'S','̀':'F','̉':'R','̃':'X','̣':'J'};
+const nfc=s=>s.normalize('NFC');
+function tach(c){const d=c.normalize('NFD');let b=d[0],shape='',tone='';for(const m of d.slice(1)){if(TONEK[m])tone=m;else shape+=m}if(b==='Đ'){b='D';shape='đ'}return{b,shape,tone}}
+function phimOf(c){/* chữ đã ghép → chuỗi phím Telex */const{b,shape,tone}=tach(c);if(c==='Đ')return['D','D'];const k=[b];
+  if(shape.includes('̂'))k.push(b);if(shape.includes('̆')||shape.includes('̛'))k.push('W');if(tone)k.push(TONEK[tone]);return k}
+function ghep(c,k){/* chữ c + phím Telex k → chữ mới hoặc null */const{b,shape,tone}=tach(c);
+  if(TONE[k]&&/[AEIOUY]/.test(b))return nfc(b+shape+TONE[k]);
+  if(k==='D'&&c==='D')return'Đ';
+  if(!shape){if(k===b&&/[AEO]/.test(b))return nfc(b+'̂'+tone);if(k==='W'){if(b==='A')return nfc('Ă'+tone);if(b==='O'||b==='U')return nfc(b+'̛'+tone)}}
+  return null}
+function freeT(q,st){const used=new Set(st.slot.filter(v=>v!==null));return st.order.filter(i=>!used.has(i))}
+function datPhim(q,st,K,unit){/* đặt một chữ; trả về true nếu đặt được */const free=freeT(q,st),e=st.slot.indexOf(null);if(e<0)return false;
+  const ex=free.find(i=>q.letters[i]===K);
+  /* ghép với chữ vừa gõ (khi không bật bộ gõ) */
+  const last=unit.prev;if(last&&last.slot!=null&&st.slot[last.slot]!=null){const cur=q.letters[st.slot[last.slot]],g=ghep(last.typed,K);
+    if(g&&(ex===undefined||!last.exact)){const gi=free.concat([st.slot[last.slot]]).find(i=>q.letters[i]===g);
+      if(gi!==undefined&&q.letters[gi]!==cur){st.slot[last.slot]=gi;last.typed=g;last.exact=true;return true}}}
+  if(ex!==undefined){st.slot[e]=ex;unit.slots.push(e);unit.prev={slot:e,typed:K,exact:true};return true}
+  /* chữ có dấu mà không có ô đúng: tách lại thành phím (ả → A + R) */
+  const ks=phimOf(K);if(ks.length>1&&ks.every(x=>x.length===1)){let ok=false;for(const x of ks){if(datPhim(q,st,x,unit))ok=true}if(ok)return true}
+  /* chữ cùng gốc, ưu tiên chữ không dấu */
+  const bK=base(K);const cands=free.filter(i=>base(q.letters[i])===bK).sort((a,b2)=>(q.letters[a]===bK?0:1)-(q.letters[b2]===bK?0:1));
+  if(cands.length){st.slot[e]=cands[0];unit.slots.push(e);unit.prev={slot:e,typed:bK,exact:false};return true}
+  return false}
+let KB=null;/* {q, units:[...]} */
 addEventListener('keydown',e=>{try{const q=RUN.list[RUN.idx],st=RUN.st;if(!isS(q)||RUN.phase!=='answer'||e.ctrlKey||e.metaKey||e.altKey)return;
   const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'))return;if(document.querySelector('#tukhoa:not([hidden])'))return;
-  if(e.key==='Backspace'){let i=st.slot.length-1;while(i>=0&&st.slot[i]===null)i--;if(i>=0){st.slot[i]=null;st.marks={};refreshBody();e.preventDefault()}return}
-  if(e.key.length!==1)return;const K=UP(e.key),used=new Set(st.slot.filter(v=>v!==null));
-  const free=st.order.filter(i=>!used.has(i));let i=free.find(i=>q.letters[i]===K);if(i===undefined)i=free.find(i=>base(q.letters[i])===base(K));
-  if(i!==undefined){e.preventDefault();put(q,st,i)}}catch(_){}});
+  if(!KB||KB.st!==st)KB={st,units:[],prev:null};
+  if(e.key==='Backspace'){e.preventDefault();let u=KB.units.pop();
+    if(u&&u.slots.length&&u.slots.every(i=>st.slot[i]!==null)){u.slots.forEach(i=>{st.slot[i]=null})}
+    else{let i=st.slot.length-1;while(i>=0&&st.slot[i]===null)i--;if(i>=0)st.slot[i]=null}
+    const lu=KB.units[KB.units.length-1];KB.prev=lu&&lu.prev||null;st.marks={};refreshBody();return}
+  if(e.key.length!==1||e.key===' ')return;const K=nfc(UP(e.key));
+  const unit={slots:[],prev:KB.prev};const before=st.slot.slice();
+  if(datPhim(q,st,K,unit)){e.preventDefault();if(unit.slots.length)KB.units.push(unit);else if(KB.units.length){/* ghép vào cụm trước */}
+    KB.prev=unit.prev;st.marks={};SND.tap();refreshBody()}}catch(_){}});
+/* chạm ô chữ: bỏ theo dõi cụm gõ phím */
+document.addEventListener('pointerdown',e=>{if(e.target.closest&&e.target.closest('.xc-tile,.xc-slot'))KB=null},true);
 /* ghi kết quả từng thuật ngữ để chọn câu cho lượt sau */
 const _ac=afterCheck;afterCheck=function(q){_ac.apply(this,arguments);try{if(!isS(q)||RUN.phase!=='done')return;const c={ok:3,fix:2,miss:1,skip:1}[RUN.res[RUN.idx]]||0;if(c){M[q.xc]=c;save()}}catch(e){}};
 /* 50:50 với câu xếp chữ: đặt sẵn đúng nửa đầu số chữ */
@@ -7083,8 +7120,8 @@ const origin={};
 function goc(el){const b=lastBtn&&performance.now()-lastAt<1500&&!el.contains(lastBtn)?lastBtn:null;if(!b)return{x:innerWidth/2,y:innerHeight/2,b:null};const r=b.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2,b}}
 function vao(el){const k=KIEU[el.id]||'zoom',o=goc(el);origin[el.id]=o;
   el.style.setProperty('--ox',o.x+'px');el.style.setProperty('--oy',o.y+'px');
-  el.classList.remove('cc-ra');void el.offsetWidth;el.classList.add('cc-vao','cc-'+(RM?'mo':k));
-  if(k==='bung'&&!RM)el.querySelectorAll('.nh-card,.tcard,.topic-card').forEach((c,i)=>{c.style.setProperty('--i',Math.min(i,14));const r=c.getBoundingClientRect();c.style.setProperty('--dx',(o.x-(r.left+r.width/2))+'px');c.style.setProperty('--dy',(o.y-(r.top+r.height/2))+'px');c.classList.remove('cc-the');void c.offsetWidth;c.classList.add('cc-the')});
+  el.classList.remove('cc-ra','sm-in','sm-out');el.style.visibility='';void el.offsetWidth;el.classList.add('cc-vao','cc-'+(RM?'mo':k));
+  if(k==='bung'&&!RM)el.querySelectorAll('.nh-card,.tcard,.topic-card').forEach((c,i)=>{c.style.setProperty('--i',Math.min(i,14));const r=c.getBoundingClientRect();c.style.setProperty('--dx',(o.x-(r.left+r.width/2))+'px');c.style.setProperty('--dy',(o.y-(r.top+r.height/2))+'px');c.classList.remove('cc-the','stg');void c.offsetWidth;c.classList.add('cc-the')});
   if(k==='bando'&&!RM)zoomBanDo();
   clearTimeout(el._cc);el._cc=setTimeout(()=>el.classList.remove('cc-vao','cc-'+k,'cc-mo'),700)}
 /* bản đồ: từ toàn quốc zoom dần vào tỉnh đang học */
@@ -7103,11 +7140,12 @@ document.addEventListener('click',e=>{if(qua)return;const b=e.target.closest&&e.
   e.preventDefault();e.stopImmediatePropagation();const k=RM?'mo':(KIEU[el.id]||'zoom');const o=origin[el.id];
   if(o&&o.b&&document.body.contains(o.b)){const r=o.b.getBoundingClientRect();el.style.setProperty('--ox',(r.left+r.width/2)+'px');el.style.setProperty('--oy',(r.top+r.height/2)+'px')}
   el.classList.remove('cc-vao');el.classList.add('cc-ra','cc-'+k);
-  setTimeout(()=>{qua=true;try{b.click()}finally{qua=false}el.classList.remove('cc-ra','cc-'+k);seen[el.id]=false},RM?120:260)},true);
+  setTimeout(()=>{el.style.visibility='hidden';qua=true;try{b.click()}finally{qua=false}seen[el.id]=false;
+    setTimeout(()=>{el.classList.remove('cc-ra','cc-'+k,'sm-out');if(el.hidden)el.style.visibility='';else{el.style.visibility='';}},320)},RM?120:260)},true);
 /* câu tiếp theo: thẻ câu trượt sang trái */
 let lastIdx=-1,lastList=null;
 try{const _rc=renderCard;renderCard=function(){const r=_rc.apply(this,arguments);try{const card=document.getElementById('card');
-  if(card&&RUN&&RUN.list===lastList&&RUN.idx!==lastIdx&&RUN.idx>0){card.classList.remove('cc-cau');void card.offsetWidth;card.classList.add('cc-cau');setTimeout(()=>card.classList.remove('cc-cau'),520)}
+  if(false&&card&&RUN&&RUN.list===lastList&&RUN.idx!==lastIdx&&RUN.idx>0){card.classList.remove('cc-cau');void card.offsetWidth;card.classList.add('cc-cau');setTimeout(()=>card.classList.remove('cc-cau'),520)}
   lastIdx=RUN.idx;lastList=RUN.list}catch(e){}return r}}catch(e){}
 })();
 
