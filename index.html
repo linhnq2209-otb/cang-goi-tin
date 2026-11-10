@@ -1050,6 +1050,11 @@ body.kc-nho .sheet,body.kc-ipad .sheet{top:calc(var(--scene-h,44vh) + 4px);botto
 @keyframes xcOrbH{from{stroke-dashoffset:78.6}to{stroke-dashoffset:-21.4}}
 @media (prefers-reduced-motion:reduce){.xc-orb .t{animation:none;stroke-dasharray:none;opacity:.5}.xc-orb .h{display:none}}
 .xc-en{font-style:normal;font-weight:600;font-size:14px;color:#2f6fe0}
+
+/* Enter khi chưa đủ chữ: ô trống nháy nhẹ (1 lần, ≤3 Hz) */
+@keyframes xcNhay{0%,100%{transform:none}30%{transform:scale(1.15);box-shadow:0 0 0 4px rgba(240,163,58,.55)}}
+.xc-slot.xc-nhay{animation:xcNhay .6s ease}
+@media (prefers-reduced-motion:reduce){.xc-slot.xc-nhay{animation:none;box-shadow:0 0 0 3px #f0a33a}}
 /* tuyệt chiêu (05/11) */
 .chieu{position:fixed;inset:0;z-index:90;overflow:auto;background:rgba(6,9,28,.86);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff}
 .chieu-in{max-width:420px;margin:0 auto;display:grid;gap:10px;justify-items:center;text-align:center;padding:calc(18px + env(safe-area-inset-top,0px)) 16px 32px}
@@ -1127,6 +1132,19 @@ body.uu-tien #card .hint{font-size:1.06em}
 .tb-box{display:grid;gap:3px;background:#e6f6ec;border:1.5px solid #1f9d5c;border-radius:14px;padding:10px 12px;color:#123d27;font-size:14px}
 .tb-box .tb-xu{color:#b07800}
 .kem-b{display:grid;gap:4px;font-size:14px}.kem-b small{opacity:.8}
+/* 10/11 (mục 38): tên máy, khoá máy lạ */
+.xt-warn{flex-wrap:wrap}
+.xt-ten{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:96;width:min(460px,calc(100% - 24px));background:#fff;color:#18203f;color-scheme:light;border:2px solid #2f5fd0;border-radius:16px;padding:12px;display:grid;gap:6px;box-shadow:0 10px 30px rgba(10,20,60,.3)}
+.xt-ten[hidden],.xt-khoa[hidden]{display:none}
+.xt-ten small{color:#4a5378}
+.xt-ten-r{display:flex;gap:8px;flex-wrap:wrap}.xt-ten-r input{flex:1;min-width:150px;font:inherit;font-size:16px;padding:8px 10px;border:1.5px solid #c3cde6;border-radius:10px;background:#fff;color:#18203f;min-height:42px}
+html.xt-bikhoa,html.xt-bikhoa body{overflow:hidden}
+.xt-khoa{position:fixed;inset:0;z-index:9000;background:linear-gradient(180deg,#24305e,#141a33);display:grid;place-items:center;padding:16px;overflow:auto}
+.xt-khoa-in{background:#fff;color:#18203f;color-scheme:light;border-radius:22px;max-width:480px;width:100%;padding:18px;display:grid;gap:10px;border:3px solid #ffd45c;box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.xt-khoa-in h2{margin:0;font-size:22px}.xt-khoa-in p{margin:0;font-size:15px;line-height:1.5}.xt-khoa-ic{font-size:40px;text-align:center}
+.xt-khoa-hd{background:#eef4ff;border-radius:12px;padding:8px 10px}
+.xt-khoa-in label{font-weight:700;font-size:14px}#xtKhoaI{letter-spacing:.2em;text-transform:uppercase;font-weight:800}
+.xt-may{margin:0;padding-left:18px;display:grid;gap:3px;font-size:14px}.xt-may i{font-style:normal;font-size:12px;font-weight:800;color:#2f5fd0}.xt-may i.ok{color:#146b3e}
 /* vai trò, góp ý, hộp duyệt (06/11) */
 .vt-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
 .vt-row input,.qt input,.qt select,.qt textarea{font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);max-width:100%}
@@ -1317,6 +1335,80 @@ html.bt-mo #nutLui{display:none!important}
 .bt-nk.bt-phuchoi{border-left:5px solid #f0a33a}
 .m-mons{display:flex;gap:14px;margin-bottom:6px}.m-mons label{display:flex;gap:6px;align-items:center}
 .bt-opt:disabled{opacity:1;color:inherit;cursor:default}
+/* 10/11: phòng biên tập luôn sáng, chữ đủ tương phản cả khi máy bật chế độ tối */
+.bt,.bt-thu{color-scheme:light}
+.bt input,.bt select,.bt textarea{color:#18203f!important;background:#fff!important;-webkit-text-fill-color:#18203f}
+.bt input::placeholder,.bt textarea::placeholder{color:#7a849e;-webkit-text-fill-color:#7a849e}
+.bt option{color:#18203f;background:#fff}
+.bt .btn,.bt-thu .btn{background:#fff!important;color:#18203f!important;border:1.5px solid #c3cde6!important;text-shadow:none}
+.bt .btn.primary,.bt-thu .btn.primary{background:#2f5fd0!important;color:#fff!important;border-color:#2f5fd0!important}
+.bt .btn:disabled{opacity:.55}
+.bt-seg button{color:#18203f}.bt-seg [aria-pressed=true]{color:#fff}
+.bt-tabs [role=tab]{color:#18203f}.bt-tabs [aria-selected=true]{color:#fff}
+.bt a.btn{text-decoration:none}
+.bt-thu-in,.bt-thu-in *{color:#18203f}.bt-opt,.bt-ds button{color:#18203f;background:#fff}.bt-ds [aria-pressed=true]{color:#fff!important;background:#2f5fd0}
+.bt-kq.dung b{color:#146b3e}.bt-kq.sai b{color:#a32622}
+.bt-f textarea,.bt-f input{font-weight:400}
+/* 10/11: giao diện kiểu game như học sinh */
+.bt{background:linear-gradient(180deg,#8fd3ff 0,#c9ecff 210px,#eef6ff 420px,#f6f8fd 100%)}
+.bt::before{content:"";position:absolute;left:0;right:0;top:0;height:200px;pointer-events:none;background:
+ radial-gradient(60px 22px at 12% 46px,#fff 98%,transparent),radial-gradient(42px 18px at 17% 36px,#fff 98%,transparent),
+ radial-gradient(70px 24px at 78% 70px,#fff 98%,transparent),radial-gradient(46px 18px at 83% 58px,#fff 98%,transparent);opacity:.85}
+.bt-top{position:relative;align-items:center;background:#fff;border-radius:22px;padding:12px 16px;box-shadow:0 6px 0 #c9d6f2,0 10px 24px rgba(30,60,140,.15);border:3px solid #ffd45c}
+.bt-robo{width:64px;height:64px;flex:none;border-radius:50%;background:#eef4ff;display:grid;place-items:center;overflow:hidden}.bt-robo svg{width:58px;height:58px}
+.bt-tit{flex:1;min-width:200px}.bt-top h1{font-size:24px;color:#18203f}
+.bt-tabs{position:relative;max-width:980px;margin:0 auto 14px;flex-wrap:wrap;gap:8px}
+.bt-tabs [role=tab]{display:inline-flex;gap:6px;align-items:center;min-height:44px;padding:6px 14px;border-radius:14px;border:2px solid #c3cde6;background:#fff;box-shadow:0 4px 0 #c3cde6;font-size:14.5px;transition:transform .12s}
+.bt-tabs [role=tab]:active{transform:translateY(3px);box-shadow:0 1px 0 #c3cde6}
+.bt-tabs [aria-selected=true]{background:#2f5fd0;border-color:#2f5fd0;box-shadow:0 4px 0 #1c3f99}
+.bt-body{position:relative}
+.bt-card,.bt-q,.bt-nk{border:2px solid #dfe5f2;border-radius:18px;box-shadow:0 4px 0 #dfe5f2}
+.bt .btn{border-radius:12px!important;box-shadow:0 3px 0 #c3cde6;font-weight:700}
+.bt .btn.primary{box-shadow:0 3px 0 #1c3f99}
+.bt-xn{font-size:12.5px;font-weight:800;color:#146b3e;background:#e7f6ee;border-radius:999px;padding:4px 10px;align-self:center;margin-right:auto}
+.bt-hoi.xong{opacity:.85}.bt-cau{margin:0;font-size:13.5px;color:#4a5378;background:#f4f6fb;border-radius:10px;padding:6px 8px}
+.bt-hoi-t{margin:0;font-size:15.5px;line-height:1.5}.bt-tl{margin:0;background:#eaf7ef;border-radius:10px;padding:6px 8px}
+.bt-sao{display:flex;gap:6px}.bt-sao button{min-width:52px;min-height:44px;border-radius:12px;border:2px solid #c3cde6;background:#fff;color:#c58a00;font-size:16px;cursor:pointer}
+.bt-sao [aria-pressed=true]{background:#ffd45c;border-color:#e0a800;color:#18203f}
+.bt-chips{display:flex;flex-wrap:wrap;gap:6px}.bt-chips button{min-height:38px;padding:4px 10px;border-radius:10px;border:2px solid #c3cde6;background:#fff;color:#18203f;font-weight:700;cursor:pointer}
+.bt-chips [aria-pressed=true]{background:#2f5fd0;border-color:#2f5fd0;color:#fff}
+.bt-lab{display:grid;gap:4px;font-weight:700;font-size:13.5px}.bt-lab input{font:inherit;padding:8px 10px;border:1px solid #cdd7ee;border-radius:10px;min-height:40px}
+.bt-nv{display:grid;gap:3px;padding:8px 10px;border-radius:12px;background:#f4f6fb}.bt-nv span{font-size:13px;color:#4a5378}
+.bt-bar{display:block;height:10px;border-radius:99px;background:#dfe5f2;overflow:hidden}.bt-bar i{display:block;height:100%;background:linear-gradient(90deg,#2f9d5c,#7ed957)}
+.bt-t tr.can td{background:#fff6dc}.bt-scroll{overflow:auto}
+.bt-me{background:linear-gradient(135deg,#fff 60%,#fff6dc)}.bt-me-h{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}.bt-me h2{font-size:26px;color:#2f5fd0}
+.bt-huys{display:flex;flex-wrap:wrap;gap:6px}.bt-huy{font-style:normal;font-weight:800;font-size:13px;background:#ffd45c;color:#18203f;border-radius:999px;padding:4px 10px}
+.bt-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.bt-tile{background:#eef4ff;border-radius:14px;padding:10px;display:grid;gap:2px;text-align:center}.bt-tile b{font-size:24px;color:#18203f}.bt-tile small{color:#4a5378;font-size:12.5px}
+.bt details summary{cursor:pointer;font-weight:700}
+/* 10/11 (mục 38): thiết bị của học sinh */
+.bt-may{border:2px solid #dfe5f2;border-radius:16px;padding:10px 12px;display:grid;gap:8px;background:#fff}
+.bt-may.khoa{border-color:#e0a800;background:#fffaf0}
+.bt-khoa-tag{background:#fdeceb;color:#a32622;font-weight:800;border-radius:999px;padding:2px 8px}
+.bt-ma{margin:0;font-size:15px}.bt-ma b{font-family:ui-monospace,monospace;font-size:24px;letter-spacing:.18em;background:#ffd45c;border-radius:10px;padding:2px 10px;color:#18203f}
+.bt-may-ds{border:1px solid #dfe5f2;border-radius:10px;display:grid;gap:6px;padding:8px}.bt-may-ds legend{font-weight:700;font-size:13.5px}
+.bt-may-ds .bt-chk input{width:20px;height:20px}
+/* thầy – trò tương tác (10/11) */
+.th-box{position:fixed;inset:0;z-index:380;background:rgba(15,20,45,.55);display:grid;place-items:center;padding:16px}.th-box[hidden]{display:none}
+.th-in{background:#fff;color:#18203f;color-scheme:light;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:16px;display:grid;gap:10px;box-shadow:0 14px 40px rgba(10,20,60,.35);border:3px solid #ffd45c}
+.th-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.th-top h2{margin:0;font-size:20px;color:#18203f}
+.th-q{background:#eef4ff;border-radius:12px;padding:8px 10px;font-size:14.5px}.th-q small{display:block;font-weight:800;color:#2f5fd0;margin-bottom:2px}
+.th-lab{font-weight:700;font-size:14px}
+.th-in textarea{font:inherit;font-size:15px;padding:8px 10px;border:1.5px solid #c3cde6;border-radius:12px;background:#fff;color:#18203f;width:100%;box-sizing:border-box}
+.th-act{display:flex;justify-content:flex-end;gap:8px}.th-note{margin:0;font-size:13.5px;color:#4a5378}
+.th-list{display:grid;gap:8px}
+.th-it{border-radius:14px;padding:10px 12px;background:#f4f6fb;border-left:5px solid #9aa6c4;display:grid;gap:4px;font-size:14.5px}.th-it p{margin:0}.th-it small{color:#4a5378}
+.th-it.nv{background:#eef4ff;border-color:#2f5fd0}.th-it.nv .btn{justify-self:start}
+.th-it.khen{background:#fff6dc;border-color:#f0a33a}.th-it.cham{background:#eaf7ef;border-color:#2f9d5c}.th-it.hoi{border-color:#7a5bd0}
+.th-it.moi{box-shadow:0 0 0 2px #ffd45c inset}.th-it.moi>b::after{content:" · mới";color:#c2410c;font-size:12px}
+.th-tl{background:#fff;border-radius:10px;padding:6px 8px;margin-top:2px}
+.hop-dot{font-weight:800;color:#c2410c;font-size:13px}
+#menuBtn.co-thu{position:relative}#menuBtn.co-thu::after{content:"";position:absolute;top:4px;right:4px;width:10px;height:10px;border-radius:50%;background:#ff4d4f;box-shadow:0 0 0 2px #fff}
+.nv-ban{display:grid;gap:6px;margin:8px 0 10px;padding:10px 12px;border-radius:16px;background:linear-gradient(135deg,#2f5fd0,#6d4bd8);color:#fff}
+.nv-ban>b{font-size:15px}
+.nv-it{display:flex;justify-content:space-between;gap:8px;align-items:center;text-align:left;border:0;border-radius:12px;padding:8px 10px;background:rgba(255,255,255,.16);color:#fff;font:inherit;cursor:pointer;min-height:44px}
+.nv-it small{opacity:.85}.nv-it:hover{background:rgba(255,255,255,.26)}
+.hoi-thay{margin-left:6px}
 .combostone{padding:6px 10px;border-radius:10px;background:color-mix(in srgb,#8fb0d8 22%,transparent)}
 .ftools{display:flex;flex-wrap:wrap;gap:6px}
 .tchip{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
@@ -6149,6 +6241,18 @@ function menu(){const box=document.getElementById('segKd');const host=box&&box.c
 menu();
 /* lượt đang mở lúc tải trang: dựng lại theo cấu trúc mới */
 try{if(TOPIC&&(TOPIC.bank||TOPIC.vn)&&xcOn()&&RUN.idx===0&&RUN.phase==='answer'&&!RUN.list.some(isS))setTopic(TOPIC.id)}catch(e){}
+
+/* 10/11 (mục 39): Enter = Kiểm tra khi đã điền đủ chữ; đã kiểm tra rồi thì Enter = Tiếp tục */
+const moModal=()=>[...document.querySelectorAll('[role="dialog"],[role="alertdialog"],.chieu-box,#tukhoa')].some(d=>!d.hidden&&d.offsetParent!==null&&!d.closest('#card'));
+const nhay=els=>els.forEach(x=>{x.classList.remove('xc-nhay');void x.offsetWidth;x.classList.add('xc-nhay');setTimeout(()=>x.classList.remove('xc-nhay'),700)});
+addEventListener('keydown',e=>{try{if(e.key!=='Enter'||e.repeat||e.isComposing||e.ctrlKey||e.metaKey||e.altKey||e.shiftKey)return;
+  const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.tagName==='BUTTON'||a.tagName==='A'||a.isContentEditable))return;
+  const q=RUN.list[RUN.idx],st=RUN.st;if(!isS(q)||moModal())return;const card=document.getElementById('card');if(!card||card.offsetParent===null)return;
+  if(RUN.phase==='answer'){e.preventDefault();
+    if(!ready(q,st)){nhay([...card.querySelectorAll('.xc-slot:not(.full)')].slice(0,1));return}
+    if(Object.keys(st.marks||{}).length){nhay([...card.querySelectorAll('.xc-slot.bad')]);return}/* vừa sai: sửa chữ đỏ trước rồi mới Enter */
+    const b=document.getElementById('checkBtn');if(b&&!b.disabled)b.click();return}
+  const n=document.getElementById('nextBtn');if(n&&card.contains(n)&&!n.disabled){e.preventDefault();n.click()}}catch(_){}});
 })();
 
 /* ================= TUYỆT CHIÊU (05/11): đạt kỹ năng → nhân vật ra chiêu tương ứng, có ảnh vinh danh để khoe
@@ -6700,12 +6804,61 @@ setTimeout(()=>{if(need()&&wcHidden())open()},1500);
 function menuHS(){const e=document.getElementById('lcCur'),h=HS();if(e&&h)e.textContent=`${h.t} · ${h.lop} · THPT Hữu Nghị 80${h.n?' · ưu tiên':''}`}
 menuHS();setInterval(menuHS,3000);
 
-/* ---------- hai máy cùng lúc ---------- */
-document.body.insertAdjacentHTML('beforeend','<div class="xt-warn" id="xtWarn" hidden role="alert"><span id="xtWarnT"></span><button type="button" class="btn small" id="xtWarnX">Đã hiểu</button></div>');
-let warnOff=0;document.getElementById('xtWarnX').onclick=()=>{document.getElementById('xtWarn').hidden=true;warnOff=Date.now()};
-async function nhip(){if(!logged()||!CFG.relay||document.visibilityState!=='visible')return;try{const r=await call({op:'nhip',may:get('cgt-may')});
-  if(r&&r.ok&&r.khac>0&&Date.now()-warnOff>10*60e3){const d=new Date(r.luc||Date.now());document.getElementById('xtWarnT').innerHTML=`<b>Cảnh báo:</b> tài khoản của em đang mở trên ${r.khac+1} máy cùng lúc (máy khác hoạt động lúc ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}). Nếu không phải em, hãy đăng xuất máy lạ, đổi mật khẩu Google và báo thầy.`;document.getElementById('xtWarn').hidden=false}}catch(e){}}
+/* ---------- hai máy cùng lúc + nhớ thiết bị + khoá máy lạ (10/11, mục 38) ----------
+   Trạm đếm số lần 2 máy cùng hoạt động trong 3 ngày: lần 1, 2 cảnh báo trên cả hai máy; lần 3 khoá máy chưa được thầy cô duyệt.
+   Mở khoá: giáo viên phụ trách lớp đọc mã cho em nhập (hoặc bấm Mở khoá trong Phòng giáo viên); máy nhập mã là máy duy nhất được nhớ. */
+const STAFFX=['chu','gv','trolY','gvlao'],laStaff=()=>STAFFX.includes(window.cgtVaiTro);
+function loaiMay(){const u=navigator.userAgent||'',pf=(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'';
+  const ipad=/iPad/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1);
+  const may=ipad?'iPad':/iPhone/.test(u)?'iPhone':/Android/.test(u)?(/Mobile/.test(u)?'Điện thoại Android':'Máy tính bảng Android'):/CrOS/.test(u)?'Chromebook':/Windows/.test(u+pf)?'Máy tính Windows':/Mac/.test(u+pf)?'Máy Mac':/Linux/.test(u+pf)?'Máy Linux':'Thiết bị';
+  const tr=/coc_coc/i.test(u)?'Cốc Cốc':/Edg\//.test(u)?'Edge':/OPR\/|Opera/.test(u)?'Opera':/SamsungBrowser/.test(u)?'Samsung Internet':/Firefox|FxiOS/.test(u)?'Firefox':/Chrome|CriOS/.test(u)?'Chrome':/Safari/.test(u)?'Safari':'trình duyệt';
+  return may+' · '+tr}
+const LOAI=loaiMay();window.loaiMay=LOAI;
+const gio=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return`${p(d.getHours())}:${p(d.getMinutes())} ${p(d.getDate())}/${p(d.getMonth()+1)}`};
+document.body.insertAdjacentHTML('beforeend',`<div class="xt-warn" id="xtWarn" hidden role="alert"><span id="xtWarnT"></span><button type="button" class="btn small" id="xtWarnX">Đã hiểu</button></div>
+<div class="xt-ten" id="xtTen" hidden role="dialog" aria-labelledby="xtTenH"><b id="xtTenH">Đặt tên cho máy này</b><small>Để thầy cô và em nhận ra máy khi cần mở khoá. Máy tự nhận: <span id="xtTenL"></span></small><div class="xt-ten-r"><input id="xtTenI" maxlength="30" placeholder="Vd: Điện thoại của em, Laptop ở nhà"><button type="button" class="btn small primary" id="xtTenOk">Lưu</button><button type="button" class="btn small" id="xtTenX">Để sau</button></div></div>
+<div class="xt-khoa" id="xtKhoa" hidden role="alertdialog" aria-modal="true" aria-labelledby="xtKhoaH"><div class="xt-khoa-in">
+ <div class="xt-khoa-ic" aria-hidden="true">🔒</div><h2 id="xtKhoaH">Máy này đang tạm khoá</h2>
+ <p id="xtKhoaT"></p><ul class="xt-may" id="xtKhoaM"></ul>
+ <p class="xt-khoa-hd">Em gặp <b>giáo viên phụ trách lớp <span id="xtKhoaLop"></span></b> để lấy mã mở khoá. Thầy cô sẽ nhắc em <b>chỉ dùng một máy</b>: máy em nhập mã sẽ là máy duy nhất được nhớ, lần sau vào không bị khoá.</p>
+ <label for="xtKhoaI">Mã mở khoá (6 kí tự)</label><div class="xt-ten-r"><input id="xtKhoaI" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="VD: K7M2QP"><button type="button" class="btn primary" id="xtKhoaOk">Mở khoá</button></div>
+ <p class="xt-msg" id="xtKhoaMsg" role="status"></p><button type="button" class="btn small" id="xtKhoaLai">Thầy cô đã mở giúp? Kiểm tra lại</button>
+</div></div>`);
+let warnOff=0,warnLan=-1,tenHoi=false,LAST=null;
+document.getElementById('xtWarnX').onclick=()=>{document.getElementById('xtWarn').hidden=true;warnOff=Date.now()};
+document.getElementById('xtTenX').onclick=()=>{document.getElementById('xtTen').hidden=true;try{sessionStorage.setItem('cgt-tenmay-sau','1')}catch(e){}};
+document.getElementById('xtTenOk').onclick=async e=>{const t=document.getElementById('xtTenI').value.trim()||LOAI;e.target.disabled=true;
+  try{const r=await call({op:'tenMay',may:get('cgt-may'),loai:LOAI,ten:t});if(r.ok){document.getElementById('xtTen').hidden=true;toast('Đã lưu tên máy: '+t);nhip()}}catch(err){}e.target.disabled=false};
+const mayLi=ds=>(ds||[]).map(x=>`<li class="${x.duyet?'duyet':''}">${esc(x.ten||x.loai||'Máy')}${x.ten&&x.loai?` <small>(${esc(x.loai)})</small>`:''}${x.nay?' <i>máy này</i>':''}${x.duyet?' <i class="ok">✓ đã duyệt</i>':''}</li>`).join('');
+function khoa(r){const k=document.getElementById('xtKhoa'),h=HS();
+  document.getElementById('xtKhoaT').innerHTML=`Tài khoản của em bị phát hiện mở <b>cùng lúc trên 2 máy ${r.toiDa||3} lần trong ${r.ngay||3} ngày</b>${r.khoaLuc?` (khoá lúc ${gio(r.khoaLuc)})`:''}. ${r.coDuyet?'Máy đã được thầy cô duyệt vẫn học bình thường.':'Em chưa có máy nào được duyệt nên các máy đều tạm khoá.'}`;
+  document.getElementById('xtKhoaM').innerHTML=mayLi(r.ds);document.getElementById('xtKhoaLop').textContent=h&&h.lop?h.lop:'của em';
+  if(k.hidden){k.hidden=false;document.documentElement.classList.add('xt-bikhoa');setTimeout(()=>{try{document.getElementById('xtKhoaI').focus()}catch(e){}},200)}}
+function moKhoaUI(){const k=document.getElementById('xtKhoa');if(!k.hidden){k.hidden=true;document.documentElement.classList.remove('xt-bikhoa');toast('Máy này đã được mở khoá')}}
+document.getElementById('xtKhoaOk').onclick=async e=>{const m=document.getElementById('xtKhoaMsg'),ma=document.getElementById('xtKhoaI').value.trim();if(ma.length<4){m.textContent='Em nhập đủ mã thầy cô đọc cho nhé.';return}
+  e.target.disabled=true;m.textContent='Đang kiểm tra…';try{const r=await call({op:'moMa',may:get('cgt-may'),loai:LOAI,ma});
+    if(r.ok){m.textContent='';moKhoaUI();toast('Đã mở khoá. Từ nay em dùng máy này nhé.');nhip()}else m.textContent=r.err==='khoa'?'Nhập sai nhiều lần, em đợi 15 phút rồi thử lại.':r.err==='sai'?`Mã chưa đúng (còn ${r.con} lần thử).`:'Chưa mở được, em thử lại.'}catch(err){m.textContent='Không kết nối được trạm.'}e.target.disabled=false};
+document.getElementById('xtKhoaI').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('xtKhoaOk').click()}});
+document.getElementById('xtKhoaLai').onclick=()=>{document.getElementById('xtKhoaMsg').textContent='Đang kiểm tra…';nhip().then(()=>{const k=document.getElementById('xtKhoa');if(!k.hidden)document.getElementById('xtKhoaMsg').textContent='Máy này vẫn đang khoá.'})};
+function canhBao(r){const n=r.lan||0,toi=r.toiDa||3,ten=(r.tenKhac||[])[0]||'máy khác';
+  const sau=n>=toi-1?(r.coDuyet&&!(r.ds||[]).some(x=>x.nay&&x.duyet)?'Lần nữa máy này sẽ bị khoá.':r.coDuyet?'Lần nữa máy chưa được duyệt sẽ bị khoá.':'Lần nữa cả hai máy sẽ bị khoá.'):`Đến lần ${toi} máy chưa được thầy cô duyệt sẽ bị khoá.`;
+  document.getElementById('xtWarnT').innerHTML=`<b>Cảnh báo lần ${Math.min(toi,Math.max(1,n))}/${toi}:</b> lúc ${gio(r.luc||Date.now())} tài khoản của em đang mở cùng lúc trên <b>${esc(ten)}</b>. ${sau}${r.veKhong?` Số lần tự về 0 lúc ${gio(r.veKhong)} nếu em không dùng 2 máy cùng lúc nữa.`:''} Nếu không phải em, hãy đăng xuất máy lạ và báo thầy cô.`;
+  document.getElementById('xtWarn').hidden=false}
+async function nhip(){if(!logged()||!CFG.relay)return;if(document.visibilityState!=='visible'&&document.getElementById('xtKhoa').hidden)return;
+  try{const r=await call({op:'nhip',may:get('cgt-may'),loai:LOAI});if(!r||!r.ok)return;LAST=r;
+  if(laStaff()){moKhoaUI();return}/* thầy cô dùng nhiều máy là bình thường */
+  if(r.khoa){khoa(r);return}moKhoaUI();
+  if(r.khac>0&&(Date.now()-warnOff>10*60e3||r.lan!==warnLan)){warnLan=r.lan;canhBao(r)}
+  if(r.moi&&!tenHoi&&!(()=>{try{return sessionStorage.getItem('cgt-tenmay-sau')==='1'}catch(e){return false}})()){tenHoi=true;document.getElementById('xtTenL').textContent=LOAI;document.getElementById('xtTenI').value='';setTimeout(()=>{document.getElementById('xtTen').hidden=false},2500)}
+  menuMay()}catch(e){}}
+window.xtNhip=nhip;
 setTimeout(nhip,4000);setInterval(nhip,60e3);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')nhip()});
+/* Menu › Thiết bị của em */
+function menuMay(){const lc=document.getElementById('lcCur'),host=lc&&lc.closest('.set');if(!host||!LAST||laStaff())return;let b=document.getElementById('mayCuaEm');
+  if(!b){host.insertAdjacentHTML('afterend','<div class="set" id="mayCuaEm"><b>Thiết bị của em</b><ul class="xt-may" id="mayDs"></ul><small id="mayNote"></small><div class="vt-row"><button type="button" class="btn small" id="mayDoiTen">Đổi tên máy này</button></div></div>');b=document.getElementById('mayCuaEm');
+    document.getElementById('mayDoiTen').onclick=()=>{document.getElementById('xtTenL').textContent=LOAI;const m=(LAST.ds||[]).find(x=>x.nay);document.getElementById('xtTenI').value=m&&m.ten||'';document.getElementById('xtTen').hidden=false}}
+  document.getElementById('mayDs').innerHTML=mayLi(LAST.ds);
+  document.getElementById('mayNote').textContent=`Dùng 2 máy cùng lúc: ${Math.min(LAST.lan||0,LAST.toiDa||3)}/${LAST.toiDa||3} lần trong ${LAST.ngay||3} ngày. Dùng lần lượt từng máy thì không sao.`}
 
 /* ================= ƯU TIÊN HỌC SINH NƯỚC NGOÀI ================= */
 const FREE=4;/* 4 lần đầu không đứt toa + 2 toa = 6 trợ giúp mỗi lượt */
@@ -6779,7 +6932,7 @@ window.kemTai=kem;setTimeout(kem,5000);
    Thầy tạo mã mời cho từng vai trò; người nhận đăng nhập Google rồi nhập mã. Mọi góp ý vào hộp chờ duyệt, thầy duyệt mới hiện cho
    học sinh. Góp ý của học sinh chỉ thầy đọc được. Dữ liệu ở kho riêng tư (hocsinh/vaitro.json, gopy.json, noidung.json). */
 (function(){
-const CFG=window.CGT_SYNC||{};
+const CFG=window.CGT_SYNC||{};try{window.cgtVaiTro=localStorage.getItem('cgt-vt')||''}catch(e){}
 const get=k=>{try{return localStorage.getItem(k)||''}catch(e){return''}};
 const logged=()=>!!(window.cgtSync&&cgtSync.loggedIn&&cgtSync.loggedIn());
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -6798,7 +6951,7 @@ if(anchor)anchor.insertAdjacentHTML('afterend',`<div class="set" id="vtSet" hidd
  <div class="vt-row"><input id="vtMa" placeholder="Nhập mã mời (nếu thầy gửi)" maxlength="40" autocomplete="off"><button type="button" class="btn small" id="vtMaOk">Nhập mã</button></div>
  <div class="vt-row"><button type="button" class="btn small" id="vtGop">Góp ý cho thầy</button><button type="button" class="btn small" id="vtVh">Góc văn hoá & hướng dẫn</button></div><small id="vtMsg"></small></div>`);
 function menuSync(){const s=document.getElementById('vtSet');if(!s)return;s.hidden=!logged()||!CFG.relay;document.getElementById('vtCur').textContent=(VT.vtTen||VT_TEN[VT.vt]||'Học sinh')+(VT.ten?' · '+VT.ten:'')+(VT.vt==='gv'&&VT.lop&&VT.lop.length?' · lớp '+VT.lop.join(', '):'');document.getElementById('vtAdmin').hidden=!staff();const bt=document.getElementById('vtBt');if(bt)bt.hidden=!(VT.vt==='chu'||VT.vt==='gv');document.getElementById('vtGop').textContent=staff()?'Gửi góp ý / nội dung':'Góp ý cho thầy'}
-async function load(){if(!logged()||!CFG.relay)return;try{const r=await call({op:'vaiTro'});if(r&&r.ok){VT=r;menuSync()}const n=await call({op:'noiDung'});if(n&&n.ok)ND=n.ds||[]}catch(e){}}
+async function load(){if(!logged()||!CFG.relay)return;try{const r=await call({op:'vaiTro'});if(r&&r.ok){VT=r;window.cgtVaiTro=r.vt;try{localStorage.setItem('cgt-vt',r.vt)}catch(e){}if(STAFF.includes(r.vt))boQuaHs();menuSync()}const n=await call({op:'noiDung'});if(n&&n.ok)ND=n.ds||[]}catch(e){}}
 setTimeout(load,3000);
 const ms=document.getElementById('vtMsg');
 const mOk=document.getElementById('vtMaOk');if(mOk)mOk.onclick=async()=>{const ma=document.getElementById('vtMa').value.trim();if(!ma)return;ms.textContent='Đang kiểm tra…';
@@ -6808,6 +6961,15 @@ const mOk=document.getElementById('vtMaOk');if(mOk)mOk.onclick=async()=>{const m
 const gB=document.getElementById('vtGop');if(gB)gB.onclick=()=>gopY('');
 const vB=document.getElementById('vtVh');if(vB)vB.onclick=()=>vanHoa();
 const aB=document.getElementById('vtAdmin');if(aB)aB.onclick=()=>admin();
+/* 10/11: thầy cô không phải chọn lớp / xác thực như học sinh: nút "Thầy cô: nhập mã" ngay trong bảng hỏi lớp */
+const STAFF=['chu','gv','trolY','gvlao'];
+function boQuaHs(){try{sessionStorage.setItem('cgt-xt-sau','1');sessionStorage.setItem('cgt-lop-sau','1')}catch(e){}['xtBox','lopChon'].forEach(id=>{const e=document.getElementById(id);if(e)e.hidden=true})}
+if(STAFF.includes(window.cgtVaiTro))boQuaHs();
+function moNhapMa(){boQuaHs();try{openMenu()}catch(e){document.getElementById('menu').hidden=false}
+  setTimeout(()=>{const v=document.getElementById('vtSet');if(!v||v.hidden){toast('Thầy cô đăng nhập Google trước, rồi vào Menu › Vai trò của em › Nhập mã');return}v.scrollIntoView({block:'center',behavior:'smooth'});const i=document.getElementById('vtMa');if(i)i.focus()},350)}
+['lcSkip','xtLater'].forEach(id=>{const b=document.getElementById(id);if(b&&!b.parentElement.querySelector('.gv-ma'))b.insertAdjacentHTML('beforebegin','<button type="button" class="btn gv-ma">Thầy cô: nhập mã</button>')});
+document.querySelectorAll('.gv-ma').forEach(b=>b.onclick=moNhapMa);
+window.moNhapMa=moNhapMa;
 const btB=document.getElementById('vtBt');if(btB)btB.onclick=()=>{location.href=location.pathname.replace(/[^/]*$/,'')+'?bientap'};
 
 /* ---------- hộp thoại dùng chung ---------- */
@@ -7463,10 +7625,11 @@ const tg=iso=>{if(!iso)return'';const d=new Date(iso);const p=n=>String(n).padSt
 const MONT={tin:'Tin học',dia:'Địa lí'};
 const monQ=code=>/(^|-)G1[0-2][A-Z]/.test(code)?'dia':'tin';
 const toastB=m=>{try{toast(m)}catch(e){}};
-let VT=null,TAB='cau',S={mon:'',cd:'',tim:'',loc:'tat',trang:1},MO=null,THU=null;
+let XN={},VT=null,TAB='cau',S={mon:'',cd:'',tim:'',loc:'tat',trang:1},MO=null,THU=null;
 
-document.body.insertAdjacentHTML('beforeend',`<div class="bt" id="bt" role="main"><header class="bt-top"><div><p class="bt-kick">Vua Học Bá · dành cho giáo viên bộ môn</p><h1>Phòng biên tập câu hỏi</h1><p class="bt-who" id="btWho">Đang kiểm tra tài khoản…</p></div>
- <div class="bt-tabs" role="tablist"><button type="button" role="tab" data-t="cau" aria-selected="true">Câu hỏi</button><button type="button" role="tab" data-t="nk" aria-selected="false">Nhật ký sửa</button><a class="btn small" href="./">Về game</a></div></header>
+document.body.insertAdjacentHTML('beforeend',`<div class="bt" id="bt" role="main"><header class="bt-top"><div class="bt-robo" aria-hidden="true">${typeof avatar==='function'?avatar('robo'):''}</div><div class="bt-tit"><p class="bt-kick">Vua Học Bá · dành cho giáo viên bộ môn</p><h1>Phòng biên tập câu hỏi</h1><p class="bt-who" id="btWho">Đang kiểm tra tài khoản…</p></div>
+ <a class="btn small bt-ve" href="./">Về game</a></header>
+ <nav class="bt-tabs" role="tablist" aria-label="Các mục">${[['cau','📝','Câu hỏi'],['thu','💬','Hộp thư'],['cham','⭐','Chấm bài'],['lop','🧭','Lớp của tôi'],['dg','🏅','Đóng góp'],['nk','🕘','Nhật ký sửa']].map(([t,i,n],k)=>`<button type="button" role="tab" data-t="${t}" aria-selected="${k===0}"><span aria-hidden="true">${i}</span>${n}</button>`).join('')}</nav>
  <div id="btBody" class="bt-body"></div></div>`);
 const body=document.getElementById('btBody'),who=document.getElementById('btWho');
 document.querySelectorAll('#bt [data-t]').forEach(b=>b.onclick=()=>{TAB=b.dataset.t;document.querySelectorAll('#bt [data-t]').forEach(x=>x.setAttribute('aria-selected',x===b));ve()});
@@ -7483,7 +7646,8 @@ async function batDau(){
       try{const r=/^CHU-/i.test(ma)?await call({op:'nhanChu',ma}):await call({op:'nhapMoi',ma});if(r.ok)batDau();else m.textContent=r.err==='sai_ma'?'Mã không đúng, đã dùng hoặc hết hạn.':'Chưa nhận được mã.'}catch(e){m.textContent='Không kết nối được trạm.'}};return}
   VT.mon=VT.mon&&VT.mon.length?VT.mon:['tin','dia'];S.mon=VT.mon.includes(window.MON)?window.MON:VT.mon[0];
   who.textContent=`${VT.vt==='chu'?'Thầy quản trị':'Giáo viên'}${VT.ten&&VT.ten!=='Thầy quản trị'?' · '+VT.ten:''} · được sửa: ${VT.mon.map(m=>MONT[m]).join(', ')}`;
-  await SC.tai();ve()}
+  window.cgtVaiTro=VT.vt;try{localStorage.setItem('cgt-vt',VT.vt)}catch(e){}
+  await SC.tai();try{const x=await call({op:'dsXacNhan'});if(x.ok)XN=x.ds||{}}catch(e){}ve()}
 
 /* ---------- danh sách câu ---------- */
 function chuDe(){return Object.keys(typeof NH_META!=='undefined'?NH_META:{}).filter(c=>(typeof monOf==='function'?monOf(c):'tin')===S.mon&&[...SC.GOC.values()].some(b=>b.t===c))}
@@ -7495,8 +7659,8 @@ const dapAn=b=>b.ty==='mc'?b.o.map((x,i)=>`<li class="${i===b.a?'dung':''}"><b>$
 function the(b){const o=SC.OV[b.c],e=SC.eff(b.c);
   return`<article class="bt-q ${o?(o.an?'an':'sua'):''}" data-c="${esc(b.c)}"><div class="bt-qh"><span class="mono">${esc(b.c)}</span><span>${esc(b.s||'')} · ${esc(b.m||'')}</span>${o?`<i class="bt-tag">${o.an?'Đang ẩn':'Đã sửa'} · ${esc(o.ten||'')} · ${tg(o.at)}</i>`:''}</div>
    <div class="bt-p">${e.p}</div><ul class="bt-o">${dapAn(e)}</ul>${e.h?`<p class="bt-h"><b>Gợi ý:</b> ${esc(e.h)}</p>`:''}
-   <div class="bt-act"><button type="button" class="btn small" data-thu>Chơi thử</button><button type="button" class="btn small primary" data-sua>Sửa câu này</button></div>${MO===b.c?form(b):''}</article>`}
-function ve(){if(!VT)return;if(TAB==='nk')return nhatKy();
+   <div class="bt-act">${XN[b.c]?`<span class="bt-xn">✓ Đã xác nhận · ${esc(XN[b.c].ten)} · ${tg(XN[b.c].at)}</span>`:''}<button type="button" class="btn small" data-thu>Chơi thử</button><button type="button" class="btn small" data-xn>${XN[b.c]?'Xác nhận lại':'Xác nhận đáp án đúng'}</button><button type="button" class="btn small primary" data-sua>Sửa câu này</button></div>${MO===b.c?form(b):''}</article>`}
+function ve(){if(!VT)return;if(TAB==='nk')return nhatKy();if(TAB==='thu')return hopThu();if(TAB==='cham')return chamBai();if(TAB==='lop')return lopToi();if(TAB==='dg')return dongGop();
   const cds=chuDe();if(S.cd&&!cds.includes(S.cd))S.cd='';const L=dsCau(),N=S.trang*25,soSua=Object.keys(SC.OV).filter(c=>monQ(c)===S.mon).length;
   body.innerHTML=`<section class="bt-loc"><label>Môn<select id="btMon">${VT.mon.map(m=>`<option value="${m}" ${m===S.mon?'selected':''}>${MONT[m]}</option>`).join('')}</select></label>
     <label>Chủ đề<select id="btCd"><option value="">Tất cả chủ đề</option>${cds.map(c=>`<option value="${c}" ${c===S.cd?'selected':''}>${esc(tenCd(c))}</option>`).join('')}</select></label>
@@ -7524,6 +7688,7 @@ function docForm(art,b){const f=art.querySelector('.bt-f'),x={p:f.querySelector(
 function gan(art){const code=art.dataset.c,b=SC.GOC.get(code);
   art.querySelector('[data-sua]').onclick=()=>{MO=MO===code?null:code;ve();const a=body.querySelector(`.bt-q[data-c="${CSS.escape(code)}"]`);if(a&&MO)a.scrollIntoView({block:'start',behavior:'smooth'})};
   art.querySelector('[data-thu]').onclick=()=>choiThu(SC.eff(code));
+  art.querySelector('[data-xn]').onclick=async e=>{e.target.disabled=true;try{const r=await call({op:'xacNhan',code});if(r.ok){XN[code]={ten:VT.ten||'Thầy cô',at:r.at};toastB('Đã ghi: đáp án đúng');ve()}else{e.target.disabled=false;toastB(r.err==='mon'?'Câu này không thuộc môn được giao':'Chưa ghi được')}}catch(err){e.target.disabled=false}};
   const f=art.querySelector('.bt-f');if(!f)return;
   f.querySelector('[data-huy]').onclick=()=>{MO=null;ve()};
   f.querySelector('[data-thuf]').onclick=()=>choiThu(Object.assign({},b,docForm(art,b)));
@@ -7565,7 +7730,131 @@ async function nhatKy(){body.innerHTML='<p class="bt-note">Đang tải nhật k�
      ${VT.vt==='chu'&&x.loai!=='phuchoi'?`<div class="bt-act"><button type="button" class="btn small" data-ph="${esc(x.id)}">Phục hồi về trước lần sửa này</button></div>`:''}</article>`).join('')||'<p class="bt-note">Chưa có lần sửa nào.</p>'}</div>`;
   body.querySelectorAll('[data-ph]').forEach(b=>b.onclick=async()=>{if(!b.dataset.chac){b.dataset.chac=1;b.textContent='Bấm lần nữa để chắc chắn phục hồi';b.classList.add('primary');return}
     b.disabled=true;try{const r2=await call({op:'phucHoi',id:b.dataset.ph});if(r2.ok){toastB('Đã phục hồi, có hiệu lực ngay');await SC.tai();nhatKy()}else{b.disabled=false;toastB('Chưa phục hồi được')}}catch(e){b.disabled=false}})}
+
+/* ================= 10/11: Hộp thư, Chấm bài, Lớp của tôi, Đóng góp ================= */
+const LOPS_ALL=[].concat(...[[10,11],[11,10],[12,13]].map(([k,n])=>Array.from({length:n},(_,i)=>`${k}A${i+1}`)));
+const lopCua=()=>VT.vt==='chu'?LOPS_ALL.concat(['khac']):(VT.lop||[]);
+const dang=t=>{body.innerHTML=`<p class="bt-note">${t||'Đang tải…'}</p>`};
+const loiTram=r=>`<p class="bt-note">Chưa tải được (${esc(r&&r.err||'lỗi kết nối')}). Thầy kiểm tra đã dán Code.gs mới và Deploy › New version chưa.</p>`;
+async function hopThu(){dang();let r;try{r=await call({op:'hopThu'})}catch(e){}if(!r||!r.ok){body.innerHTML=loiTram(r);return}
+  const chua=r.ds.filter(x=>!x.tl),da=r.ds.filter(x=>x.tl);
+  const it=x=>`<article class="bt-card bt-hoi ${x.tl?'xong':''}" data-id="${esc(x.id)}"><div class="bt-qh"><b>${esc(x.ma_hs||'Học sinh')}</b><span>${esc(x.ten||'')}${x.lop?' · lớp '+esc(x.lop):''} · ${tg(x.at)}</span>${x.code?`<span class="mono">${esc(x.code)}</span>`:''}</div>
+    ${x.cau?`<p class="bt-cau">${esc(x.cau)}</p>`:''}<p class="bt-hoi-t">❓ ${esc(x.text)}</p>
+    ${x.tl?`<p class="bt-tl"><b>${esc(x.tl.ten)}:</b> ${esc(x.tl.text)} <small>· ${tg(x.tl.at)}</small></p>`:`<div class="bt-f"><textarea rows="3" maxlength="2000" placeholder="Giải thích ngắn gọn, gợi mở để em tự nghĩ tiếp"></textarea><div class="bt-act"><button type="button" class="btn primary" data-tl>Gửi trả lời (+2 điểm đóng góp)</button></div></div>`}</article>`;
+  body.innerHTML=`<p class="bt-note">${chua.length} câu chưa trả lời · ${da.length} câu đã trả lời. Học sinh thấy trả lời trong Menu › Hộp thư của em và được +1 Xu Vàng.</p><div class="bt-list">${chua.map(it).join('')||'<p class="bt-note">Không có câu hỏi mới.</p>'}</div>${da.length?`<details class="bt-card"><summary>Đã trả lời (${da.length})</summary><div class="bt-list">${da.map(it).join('')}</div></details>`:''}`;
+  body.querySelectorAll('[data-tl]').forEach(b=>b.onclick=async()=>{const a=b.closest('.bt-hoi'),t=a.querySelector('textarea').value.trim();if(t.length<2)return;b.disabled=true;try{const r2=await call({op:'traLoi',id:a.dataset.id,text:t});if(r2.ok){toastB('Đã gửi trả lời');hopThu()}else{b.disabled=false;toastB('Chưa gửi được')}}catch(e){b.disabled=false}})}
+let CL='chua';
+async function chamBai(){dang();let r;try{r=await call({op:'dsPhanBien'})}catch(e){}if(!r||!r.ok){body.innerHTML=loiTram(r);return}
+  const L=r.ds.filter(x=>CL==='chua'?!x.cham:!!x.cham);
+  body.innerHTML=`<section class="bt-loc"><div class="bt-seg" role="group" aria-label="Lọc bài">${[['chua','Chưa chấm'],['da','Đã chấm']].map(([v,t])=>`<button type="button" data-cl="${v}" aria-pressed="${CL===v}">${t} (${r.ds.filter(x=>v==='chua'?!x.cham:!!x.cham).length})</button>`).join('')}</div></section>
+   <p class="bt-note">Bài Góc Phản Biện: học sinh tự viết lời giải thích cho câu từng làm sai. Chấm 0–3 sao, học sinh nhận số Xu Vàng bằng số sao. Bài mới vào mỗi đêm (${esc(r.cap_nhat)}).</p>
+   <div class="bt-list">${L.slice(0,60).map(x=>`<article class="bt-card bt-pb" data-key="${esc(x.key)}"><div class="bt-qh"><b>${esc(x.ma_hs||'Học sinh chưa xác thực')}</b><span>câu ${esc(x.ref)} · ${x.words} từ · ${tg(x.at)}</span></div><p class="bt-hoi-t">${esc(x.text)}</p>
+     <div class="bt-f"><div class="bt-sao" role="group" aria-label="Số sao">${[0,1,2,3].map(n=>`<button type="button" data-sao="${n}" aria-pressed="${x.cham&&x.cham.sao===n}">${n?'★'.repeat(n):'0'}</button>`).join('')}</div>
+     <textarea rows="2" maxlength="600" placeholder="Nhận xét ngắn: điểm tốt, chỗ cần sửa">${esc(x.cham&&x.cham.nx||'')}</textarea><div class="bt-act">${x.cham?`<small>${esc(x.cham.ten)} · ${tg(x.cham.at)}</small>`:''}<button type="button" class="btn primary" data-luu-cham>Lưu điểm</button></div></div></article>`).join('')||'<p class="bt-note">Không có bài nào.</p>'}</div>`;
+  body.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>{CL=b.dataset.cl;chamBai()});
+  body.querySelectorAll('.bt-pb').forEach(a=>{a.querySelectorAll('[data-sao]').forEach(b=>b.onclick=()=>{a.querySelectorAll('[data-sao]').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+    a.querySelector('[data-luu-cham]').onclick=async e=>{const s=a.querySelector('[data-sao][aria-pressed="true"]');if(!s){toastB('Chọn số sao trước');return}e.target.disabled=true;
+      try{const r2=await call({op:'chamBai',key:a.dataset.key,sao:+s.dataset.sao,nx:a.querySelector('textarea').value});if(r2.ok){toastB('Đã lưu điểm');chamBai()}else{e.target.disabled=false;toastB('Chưa lưu được')}}catch(err){e.target.disabled=false}}})}
+let LOPC='';
+async function lopToi(){const L=lopCua();if(!L.length){body.innerHTML='<p class="bt-note">Tài khoản này chưa được giao lớp. Thầy quản trị giao lớp ở Bảng quản trị › Vai trò.</p>';return}
+  if(!L.includes(LOPC))LOPC=L[0];const cds=Object.keys(typeof NH_META!=='undefined'?NH_META:{}).filter(c=>VT.mon.includes(typeof monOf==='function'?monOf(c):'tin'));
+  const han=new Date(Date.now()+7*864e5).toISOString().slice(0,10);
+  body.innerHTML=`<section class="bt-card"><h2>🧭 Giao nhiệm vụ tuần</h2><div class="bt-loc"><label>Chủ đề<select id="nvCd">${cds.map(c=>`<option value="${c}">${esc(tenCd(c))}</option>`).join('')}</select></label><label>Số lượt<input id="nvSo" type="number" min="1" max="20" value="2"></label><label>Hạn<input id="nvHan" type="date" value="${han}"></label></div>
+    <div class="bt-chips" role="group" aria-label="Lớp nhận nhiệm vụ">${L.filter(l=>l!=='khac').map(l=>`<button type="button" data-nvl="${l}" aria-pressed="${l===LOPC}">${l}</button>`).join('')}</div>
+    <label class="bt-lab">Lời nhắn (không bắt buộc)<input id="nvGhi" maxlength="300" placeholder="Vd: Ôn kỹ thiết bị mạng trước giờ kiểm tra"></label><div class="bt-act"><button type="button" class="btn primary" id="nvGiao">Giao nhiệm vụ</button></div><div id="nvDs" class="bt-list"><p class="bt-note">Đang tải nhiệm vụ đã giao…</p></div></section>
+   <section class="bt-card"><h2>🆘 Ai cần giúp</h2><div class="bt-loc"><label>Lớp<select id="cgLop">${L.map(l=>`<option value="${l}" ${l===LOPC?'selected':''}>${l==='khac'?'Chưa xác thực':l}</option>`).join('')}</select></label></div><p class="bt-note">Xếp trước: em chưa chơi, điểm trung bình dưới 50, hoặc hơn 7 ngày không học. Số liệu theo kết quả trạm gộp mỗi đêm.</p><div id="cgDs" class="bt-list"><p class="bt-note">Đang tải…</p></div></section>
+   <section class="bt-card" id="mayCard"><h2>🔒 Thiết bị của học sinh</h2><p class="bt-note">Em dùng 2 máy cùng lúc 3 lần trong 3 ngày thì máy chưa được duyệt bị khoá. Thầy cô nhắc em chỉ dùng một máy, rồi đọc <b>mã mở khoá</b> cho em nhập trên máy em chọn, hoặc chọn máy và bấm <b>Mở khoá</b> ngay tại đây. Máy được chọn là máy duy nhất được nhớ.</p><div id="mayDsGv" class="bt-list"><p class="bt-note">Đang tải…</p></div></section>`;
+  body.querySelectorAll('[data-nvl]').forEach(b=>b.onclick=()=>b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true'));
+  document.getElementById('nvGiao').onclick=async e=>{const lop=[...body.querySelectorAll('[data-nvl][aria-pressed="true"]')].map(b=>b.dataset.nvl),cd=document.getElementById('nvCd').value;if(!lop.length){toastB('Chọn ít nhất một lớp');return}
+    e.target.disabled=true;try{const r=await call({op:'giaoNv',lop,cd,ten:tenCd(cd),so:+document.getElementById('nvSo').value,han:document.getElementById('nvHan').value,ghi:document.getElementById('nvGhi').value});if(r.ok){toastB('Đã giao nhiệm vụ');lopToi()}else{e.target.disabled=false;toastB('Chưa giao được ('+r.err+')')}}catch(err){e.target.disabled=false}};
+  document.getElementById('cgLop').onchange=e=>{LOPC=e.target.value;canGiup();dsMay()};
+  (async()=>{let r;try{r=await call({op:'dsNv'})}catch(e){}const o=document.getElementById('nvDs');if(!o)return;if(!r||!r.ok){o.innerHTML=loiTram(r);return}
+    o.innerHTML=r.ds.length?r.ds.map(x=>{const pc=x.si?Math.round(x.xong/x.si*100):0;return`<div class="bt-nv"><b>${esc(x.ten||x.cd)}</b><span>${x.lop.join(', ')} · hạn ${esc((x.han||'').split('-').reverse().join('/'))} · ${esc(x.gv)}</span><span class="bt-bar"><i style="width:${pc}%"></i></span><small>${x.xong}/${x.si} em đã làm (${pc}%)</small></div>`}).join(''):'<p class="bt-note">Chưa giao nhiệm vụ nào.</p>'})();
+  canGiup();dsMay()}
+const KHEN={sao:'⭐ Ngôi sao chăm chỉ',tien:'📈 Tiến bộ vượt bậc',giup:'🤝 Bạn tốt giúp bạn',sang:'💡 Ý tưởng sáng tạo'};
+async function dsMay(){const o=document.getElementById('mayDsGv');if(!o)return;o.innerHTML='<p class="bt-note">Đang tải…</p>';let r;try{r=await call({op:'dsMay',lop:LOPC})}catch(e){}if(!r||!r.ok){o.innerHTML=loiTram(r);return}
+  if(!r.ds.length){o.innerHTML=`<p class="bt-note">Lớp ${esc(LOPC==='khac'?'(chưa xác thực)':LOPC)} không có em nào dùng 2 máy cùng lúc trong ${r.ngay} ngày qua.</p>`;return}
+  o.innerHTML=r.ds.map(x=>`<article class="bt-may ${x.khoa?'khoa':''}" data-k="${esc(x.k)}"><div class="bt-qh"><b>${esc(x.ma_hs||'—')}</b><span>${esc(x.ten)}</span><span>${x.lan}/${r.toiDa} lần dùng 2 máy cùng lúc</span>${x.khoa?`<span class="bt-khoa-tag">Khoá từ ${tg(x.khoa.at)}</span>`:''}</div>
+    ${x.khoa?`<p class="bt-ma">Mã mở khoá: <b>${esc(x.khoa.ma)}</b> <small>đọc cho em nhập trên máy em sẽ dùng</small></p>`:''}
+    <fieldset class="bt-may-ds"><legend>Chọn máy duy nhất em được dùng</legend>${x.may.map((m,i)=>`<label class="bt-chk"><input type="radio" name="m_${esc(x.k)}" value="${esc(m.m)}" ${m.duyet||(!x.may.some(y=>y.duyet)&&i===0)?'checked':''}> ${esc(m.ten||m.loai||'Máy')}${m.ten&&m.loai?` <small>(${esc(m.loai)})</small>`:''}${m.duyet?' <i class="bt-tag">đã duyệt</i>':''} <small>· ${m.cuoi?tg(new Date(m.cuoi).toISOString()):''}</small></label>`).join('')}</fieldset>
+    <div class="bt-act"><button type="button" class="btn primary" data-mo>${x.khoa?'Mở khoá, nhớ máy đã chọn':'Duyệt máy đã chọn, xoá số lần'}</button></div></article>`).join('');
+  o.querySelectorAll('[data-mo]').forEach(b=>b.onclick=async()=>{const a=b.closest('.bt-may'),k=a.dataset.k,c=a.querySelector('input[type=radio]:checked');b.disabled=true;
+    try{const r2=await call({op:'moKhoaMay',lop:LOPC,k,m:c?c.value:''});if(r2.ok){toastB('Đã mở khoá, máy được chọn sẽ được nhớ');dsMay()}else{b.disabled=false;toastB('Chưa mở được ('+r2.err+')')}}catch(e){b.disabled=false}})}
+async function canGiup(){const o=document.getElementById('cgDs');if(!o)return;o.innerHTML='<p class="bt-note">Đang tải…</p>';let r;try{r=await call({op:'canGiup',lop:LOPC})}catch(e){}if(!r||!r.ok){o.innerHTML=loiTram(r);return}
+  o.innerHTML=`<table class="bt-t"><thead><tr><th>Mã</th><th>Tên</th><th>Điểm TB</th><th>Lần cuối</th><th>Cần chú ý</th><th></th></tr></thead><tbody>${r.ds.map(x=>`<tr class="${x.ly?'can':''}"><td class="mono">${esc(x.ma_hs)}</td><td>${esc(x.ten)}${x.nn?' 🌏':''}</td><td>${x.tb==null?'–':x.tb}</td><td>${x.ngay==null?'–':x.ngay+' ngày trước'}</td><td>${esc(x.ly||'')}</td><td><button type="button" class="btn small" data-khen="${esc(x.ma_hs)}">Gửi thẻ khen</button></td></tr>`).join('')}</tbody></table>`;
+  o.querySelectorAll('[data-khen]').forEach(b=>b.onclick=()=>{const tr=b.closest('tr');if(tr.nextElementSibling&&tr.nextElementSibling.classList.contains('bt-khen'))return tr.nextElementSibling.remove();
+    tr.insertAdjacentHTML('afterend',`<tr class="bt-khen"><td colspan="6"><div class="bt-row"><select>${Object.entries(KHEN).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><input maxlength="300" placeholder="Lời khen ngắn" style="flex:1"><button type="button" class="btn primary">Gửi</button></div></td></tr>`);
+    const row=tr.nextElementSibling;row.querySelector('.btn').onclick=async e=>{e.target.disabled=true;try{const r2=await call({op:'guiKhen',ma_hs:b.dataset.khen,loai:row.querySelector('select').value,loi:row.querySelector('input').value});if(r2.ok){toastB('Đã gửi thẻ khen');row.remove()}else{e.target.disabled=false;toastB('Chưa gửi được')}}catch(err){e.target.disabled=false}}})}
+async function dongGop(){dang();let r;try{r=await call({op:'dongGop'})}catch(e){}if(!r||!r.ok){body.innerHTML=loiTram(r);return}
+  const huy=x=>[[x.sua>=10,'🛠 Thợ sửa câu'],[x.xn>=20,'🛡 Người gác đáp án'],[x.hs>=20,'🤝 Người bạn đồng hành'],[x.cham>=20,'⚖️ Giám khảo'],[x.gio>=10,'⏱ Trực chiến'],[x.diem>=100,'👑 Trụ cột Vua Học Bá']].filter(a=>a[0]).map(a=>`<i class="bt-huy">${a[1]}</i>`).join('')||'<small>Chưa có huy hiệu</small>';
+  const me=r.ds.find(x=>x.toi)||r.ds[0];
+  const o=x=>[['Câu đã sửa',x.sua],['Đáp án đã xác nhận',x.xn],['Thời gian trực tuyến',x.phut<60?(x.phut||0)+' phút':x.gio+' giờ'],['Học sinh đã hỗ trợ',x.hs],['Bài đã chấm',x.cham],['Câu hỏi đã trả lời',x.tl],['Nhiệm vụ đã giao',x.nv],['Thẻ khen đã gửi',x.khen]];
+  body.innerHTML=`${me?`<section class="bt-card bt-me"><div class="bt-me-h"><div><p class="bt-kick">Đóng góp của ${esc(me.ten)}</p><h2>${me.diem} điểm đóng góp</h2></div><div class="bt-huys">${huy(me)}</div></div><div class="bt-tiles">${o(me).map(([t,v])=>`<div class="bt-tile"><b>${v}</b><small>${t}</small></div>`).join('')}</div>
+    <p class="bt-note">Cách tính điểm: sửa 1 câu 3 điểm · xác nhận 1 đáp án 1 · trả lời 1 câu hỏi 2 · chấm 1 bài 2 · giao 1 nhiệm vụ 1 · gửi 1 thẻ khen 1 · mỗi giờ trực tuyến 1.</p></section>`:''}
+   ${VT.vt==='chu'?`<section class="bt-card"><h2>Bảng đóng góp của thầy cô</h2><div class="bt-scroll"><table class="bt-t"><thead><tr><th>Thầy cô</th><th>Điểm</th><th>Sửa</th><th>Xác nhận</th><th>Trực tuyến</th><th>HS hỗ trợ</th><th>Chấm</th><th>Trả lời</th><th>Nhiệm vụ</th><th>Khen</th><th>Lần cuối</th></tr></thead><tbody>${r.ds.map(x=>`<tr><td>${esc(x.ten)}</td><td><b>${x.diem}</b></td><td>${x.sua}</td><td>${x.xn}</td><td>${x.phut<60?(x.phut||0)+'′':x.gio+'h'}</td><td>${x.hs}</td><td>${x.cham}</td><td>${x.tl}</td><td>${x.nv}</td><td>${x.khen}</td><td>${tg(x.cuoi)}</td></tr>`).join('')}</tbody></table></div></section>`:''}`}
 setTimeout(batDau,600);
+})();
+
+/* ================= THẦY – TRÒ TƯƠNG TÁC (10/11) — phía học sinh trong game
+   - Nút "Hỏi thầy cô" dưới mỗi câu: gửi câu hỏi về hộp thư của giáo viên đúng môn.
+   - Menu › Hộp thư của em: thầy cô trả lời, bài Góc Phản Biện đã chấm (sao + nhận xét), nhiệm vụ tuần của lớp, thẻ khen.
+     Lần đầu đọc: trả lời +1 Xu Vàng, bài chấm + số sao Xu Vàng, thẻ khen +1 Xu Vàng (mỗi thứ một lần).
+   - Bảng chọn chủ đề hiện "Nhiệm vụ tuần" của lớp, bấm để vào đúng chủ đề.
+   - Thầy cô: máy báo "đang trực tuyến" mỗi phút khi trang đang mở (để tính giờ đóng góp). */
+(function(){
+const CFG=window.CGT_SYNC||{};if(!CFG.relay)return;
+const get=k=>{try{return localStorage.getItem(k)||''}catch(e){return''}};
+const logged=()=>!!(window.cgtSync&&cgtSync.loggedIn());
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function call(body){const r=await fetch(CFG.relay,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({session:get('cgt-sync')},body))});return r.json()}
+const STAFF=['chu','gv','trolY','gvlao'],isStaff=()=>STAFF.includes(window.cgtVaiTro);
+const tg=iso=>{if(!iso)return'';const d=new Date(iso),p=n=>String(n).padStart(2,'0');return`${p(d.getDate())}/${p(d.getMonth()+1)} ${p(d.getHours())}:${p(d.getMinutes())}`};
+/* ---------- giờ trực tuyến của thầy cô ---------- */
+setInterval(()=>{if(logged()&&isStaff()&&document.visibilityState==='visible')call({op:'trucTuyen'}).catch(()=>{})},60000);
+/* ---------- hộp thoại dùng chung ---------- */
+document.body.insertAdjacentHTML('beforeend',`<div class="th-box" id="thBox" hidden role="dialog" aria-modal="true" aria-labelledby="thTitle"><div class="th-in"><div class="th-top"><h2 id="thTitle"></h2><button type="button" class="btn small" id="thDong" aria-label="Đóng">×</button></div><div id="thBody"></div></div></div>`);
+const box=document.getElementById('thBox'),tbody=document.getElementById('thBody');
+const mo=(t,h)=>{document.getElementById('thTitle').textContent=t;tbody.innerHTML=h;box.hidden=false};
+document.getElementById('thDong').onclick=()=>{box.hidden=true};
+/* ---------- Hỏi thầy cô ---------- */
+function hoi(q){const ma=q.code||(q.xc?'XC:'+q.xc:'');
+  mo('Hỏi thầy cô',`<div class="th-q"><small>Câu em đang hỏi</small><div>${q.prompt}</div></div><label class="th-lab" for="thHoi">Em chưa hiểu chỗ nào? Viết rõ để thầy cô giúp nhanh hơn.</label><textarea id="thHoi" rows="4" maxlength="1000" placeholder="Vd: Em chưa hiểu vì sao switch không dùng để nối các mạng khác nhau"></textarea>
+    <div class="th-act"><button type="button" class="btn primary" id="thGui">Gửi câu hỏi</button></div><p class="th-note" id="thMsg">Câu trả lời sẽ hiện ở Menu › Hộp thư của em, kèm +1 Xu Vàng.</p>`);
+  document.getElementById('thGui').onclick=async e=>{const t=document.getElementById('thHoi').value.trim(),m=document.getElementById('thMsg');if(t.length<5){m.textContent='Em viết thêm một chút nhé.';return}
+    e.target.disabled=true;m.textContent='Đang gửi…';try{const r=await call({op:'hoiThay',code:ma.startsWith('XC:')?'':ma,mon:window.MON||'tin',cau:q.prompt,text:t});
+      if(r.ok){box.hidden=true;toast('Đã gửi câu hỏi cho thầy cô')}else{e.target.disabled=false;m.textContent=r.err==='nhieu'?'Hôm nay em đã hỏi 10 câu rồi, mai hỏi tiếp nhé.':r.err==='session'?'Em đăng nhập Google trước nhé.':'Chưa gửi được, em thử lại.'}}catch(err){e.target.disabled=false;m.textContent='Không kết nối được trạm.'}}}
+try{const _rc=renderCard;renderCard=function(){const r=_rc.apply(this,arguments);try{if(!logged()||isStaff())return r;const q=RUN.list[RUN.idx];if(!q)return r;
+  const foot=document.querySelector('#card .foot .left');if(foot&&!foot.querySelector('.hoi-thay')){foot.insertAdjacentHTML('beforeend','<button type="button" class="btn small hoi-thay">Hỏi thầy cô</button>');foot.querySelector('.hoi-thay').onclick=()=>hoi(q)}}catch(e){}return r}}catch(e){}
+/* ---------- Hộp thư của em ---------- */
+let HOP=null;let nhan={};try{nhan=JSON.parse(get('cgt-hop-nhan')||'{}')}catch(e){}
+const luuNhan=()=>{try{localStorage.setItem('cgt-hop-nhan',JSON.stringify(nhan))}catch(e){}};
+function chuaDoc(){if(!HOP)return 0;return HOP.hoi.filter(x=>x.tl&&!nhan['tl'+x.id]).length+HOP.cham.filter(x=>!nhan['cb'+x.key]).length+HOP.khen.filter(x=>!nhan['kh'+x.id]).length}
+function cham(){const n=chuaDoc(),d=document.getElementById('hopDot'),m=document.getElementById('menuBtn');if(d)d.textContent=n?`${n} mới`:'';if(m)m.classList.toggle('co-thu',n>0)}
+async function tai(){if(!logged()||isStaff())return;try{const r=await call({op:'hopHs'});if(r&&r.ok){HOP=r;cham();nvBanner()}}catch(e){}}
+setTimeout(tai,4000);setInterval(()=>{if(document.visibilityState==='visible')tai()},10*60e3);
+function thuong(){let xu=0;HOP.hoi.forEach(x=>{if(x.tl&&!nhan['tl'+x.id]){nhan['tl'+x.id]=1;xu+=1}});HOP.cham.forEach(x=>{if(!nhan['cb'+x.key]){nhan['cb'+x.key]=1;xu+=x.sao||0}});HOP.khen.forEach(x=>{if(!nhan['kh'+x.id]){nhan['kh'+x.id]=1;xu+=1}});
+  if(xu){FG.stone=(FG.stone||0)+xu;try{fSave()}catch(e){}toast(`+${xu} Xu Vàng từ hộp thư`)}luuNhan();cham()}
+const KHEN={sao:'⭐ Ngôi sao chăm chỉ',tien:'📈 Tiến bộ vượt bậc',giup:'🤝 Bạn tốt giúp bạn',sang:'💡 Ý tưởng sáng tạo'};
+function hopThu(){if(!HOP){mo('Hộp thư của em','<p class="th-note">Đang tải…</p>');tai().then(()=>HOP&&hopThu());return}
+  const L=[];
+  HOP.nv.forEach(x=>L.push(`<article class="th-it nv"><b>Nhiệm vụ tuần · ${esc(x.gv)}</b><p>${esc(x.ten||x.cd)}${x.so>1?` · ${x.so} lượt`:''}${x.han?` · hạn ${x.han.split('-').reverse().join('/')}`:''}</p>${x.ghi?`<small>${esc(x.ghi)}</small>`:''}<button type="button" class="btn small primary" data-nv="${esc(x.cd)}">Làm ngay</button></article>`));
+  HOP.khen.forEach(x=>L.push(`<article class="th-it khen ${nhan['kh'+x.id]?'':'moi'}"><b>${KHEN[x.loai]||'Thẻ khen'}</b><p>${esc(x.loi)}</p><small>${esc(x.ten)} · ${tg(x.at)}</small></article>`));
+  HOP.cham.forEach(x=>L.push(`<article class="th-it cham ${nhan['cb'+x.key]?'':'moi'}"><b>Bài Góc Phản Biện đã chấm: ${'★'.repeat(x.sao)}${'☆'.repeat(3-x.sao)}</b>${x.nx?`<p>${esc(x.nx)}</p>`:''}<small>${esc(x.ten)} · ${tg(x.at)} · câu ${esc(x.ref)}</small></article>`));
+  HOP.hoi.forEach(x=>L.push(`<article class="th-it hoi ${x.tl&&!nhan['tl'+x.id]?'moi':''}"><b>Em hỏi:</b> ${esc(x.text)}${x.tl?`<div class="th-tl"><b>${esc(x.tl.ten)} trả lời:</b> ${esc(x.tl.text)}<small> · ${tg(x.tl.at)}</small></div>`:'<small>Thầy cô chưa trả lời</small>'}</article>`));
+  mo('Hộp thư của em',L.length?`<div class="th-list">${L.join('')}</div>`:'<p class="th-note">Chưa có thư nào. Gặp câu khó, em bấm "Hỏi thầy cô" ngay dưới câu hỏi.</p>');
+  tbody.querySelectorAll('[data-nv]').forEach(b=>b.onclick=()=>{box.hidden=true;try{document.getElementById('menu').hidden=true;setTopic('nh-'+b.dataset.nv.replace(/^nh-/,''))}catch(e){}});
+  thuong()}
+const vt=document.getElementById('vtSet');
+if(vt)vt.insertAdjacentHTML('afterend',`<div class="set" id="hopSet"><b>Hộp thư của em</b><div class="vt-row"><button type="button" class="btn small primary" id="hopMo">Mở hộp thư</button><span class="hop-dot" id="hopDot"></span></div><small>Thầy cô trả lời câu hỏi, chấm bài Góc Phản Biện, giao nhiệm vụ tuần, gửi thẻ khen.</small></div>`);
+const hb=document.getElementById('hopMo');if(hb)hb.onclick=hopThu;
+setInterval(()=>{const s=document.getElementById('hopSet');if(s)s.hidden=!logged()||isStaff()},2000);
+/* ---------- nhiệm vụ tuần trong bảng chọn chủ đề ---------- */
+function nvBanner(){const t=document.querySelector('#topics .topics-in');if(!t||!HOP)return;let b=t.querySelector('.nv-ban');if(!HOP.nv.length){if(b)b.remove();return}
+  const h=`<b>Nhiệm vụ tuần của lớp</b>${HOP.nv.map(x=>`<button type="button" class="nv-it" data-nv="${esc(x.cd)}"><span>${esc(x.ten||x.cd)}</span><small>${esc(x.gv)}${x.han?' · hạn '+x.han.split('-').reverse().join('/'):''}</small></button>`).join('')}`;
+  if(!b){const h2=t.querySelector('h2');(h2&&h2.parentElement||t).insertAdjacentHTML('afterend','<div class="nv-ban"></div>');b=t.querySelector('.nv-ban')}
+  if(b){b.innerHTML=h;b.querySelectorAll('[data-nv]').forEach(x=>x.onclick=()=>{try{document.getElementById('topics').hidden=true;setTopic('nh-'+x.dataset.nv.replace(/^nh-/,''))}catch(e){}})}}
+try{const _nh=nhHTML;nhHTML=function(){const r=_nh.apply(this,arguments);setTimeout(nvBanner,30);return r}}catch(e){}
+window.thayTro={tai,hopThu};
 })();
 
 </script>
