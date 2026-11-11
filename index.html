@@ -7143,7 +7143,7 @@ async function pane(){const p=P();try{
       o.innerHTML=ids.length?`<p class="lc-note">${r.ds.length} dòng · ${esc(r.cap_nhat)}</p><div class="kq-tb"><table><thead><tr><th>Mã</th><th>Học sinh</th><th>Chủ đề đã làm</th><th>Điểm TB</th><th>Bậc cao nhất</th></tr></thead><tbody>${ids.map(id=>{const d=by[id].ds,tb=Math.round(d.reduce((a,x)=>a+(x.diem||0),0)/d.length),B=['SS','S','A','B','C','D','G'],best=d.map(x=>x.bac).sort((a,b)=>B.indexOf(a)-B.indexOf(b))[0];
         return`<tr><td>${esc(id)}</td><td>${esc(by[id].t)}</td><td>${d.length}</td><td>${tb}</td><td><b class="bk-bac bk-b${esc(best)}">${esc(best)}</b></td></tr>`}).join('')}</tbody></table></div>`:'<p class="lc-note">Lớp này chưa có kết quả (học sinh cần xác thực và làm bài; kết quả gộp mỗi đêm).</p>'};
     document.getElementById('kqLop').onchange=go;go();return}
-}catch(e){p.innerHTML=`<p class="xt-msg">${e&&e.err==='quyen'?'Tài khoản này không có quyền xem mục này.':'Không tải được. Kiểm tra mạng hoặc trạm.'}</p>`}}
+}catch(e){p.innerHTML=`<p class="xt-msg">${e&&e.err==='quyen'?'Tài khoản này không có quyền xem mục này.':e&&e.err==='op'?'Trạm chưa có chức năng này: thầy dán Code.gs mới vào Apps Script, bấm Lưu, rồi Deploy › Manage deployments › bút chì › New version › Deploy.':e&&e.err?'Trạm báo lỗi: '+esc(String(e.err).slice(0,160)):'Không tải được. Kiểm tra mạng hoặc trạm.'}</p>`}}
 window.qtAdmin=admin;
 })();
 
