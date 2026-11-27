@@ -9060,6 +9060,65 @@ if(typeof renderCard==='function'){const _rc=renderCard;renderCard=function(){tr
 window.__xcCmd=CMD;
 })();
 
+/* ===== ITEM 65 · LƯU TIẾN TRÌNH ĐANG CHƠI, MẤT KẾT NỐI / TẢI LẠI TRANG VẪN LÀM TIẾP · 27/11 =====
+ Điện thoại hay tự tải lại trang (hết RAM, chuyển app, khoá màn hình) → trước đây chặng quay về câu 1.
+ Nay: mỗi lần làm xong một câu, lưu bản chụp chặng vào localStorage của MÁY NÀY (khoá 'run-cgt', không đồng bộ). Mở lại: hỏi "Tiếp tục câu k/n?". */
+(function(){
+if(typeof start!=='function'||typeof next!=='function'||typeof finish!=='function'||typeof setTopic!=='function')return;
+const KEY='run-cgt',MAXAGE=24*3600*1000;
+const ls={get(){try{return localStorage.getItem(KEY)}catch(e){return null}},set(v){try{localStorage.setItem(KEY,v)}catch(e){}},del(){try{localStorage.removeItem(KEY)}catch(e){}}};
+const clean=(k,v)=>(typeof k==='string'&&k[0]==='_')?undefined:(v instanceof Set?Array.from(v):v);
+const sig=q=>{try{return JSON.stringify(q,clean)}catch(e){return null}};
+let hold=false,last='';
+const answered=()=>RUN.res.filter(Boolean).length;
+function resumeIdx(){let i=RUN.idx;if(RUN.res[i]&&RUN.phase==='done')i++;return i}
+function save(){
+ if(hold||!RUN||!RUN.list||!RUN.list.length||!TOPIC)return;
+ const n=answered();if(!n)return;
+ const ri=resumeIdx();
+ const s=TOPIC.id+'|'+ri+'|'+RUN.res.join(',')+'|'+RUN.xp+'|'+RUN.list.length;if(s===last)return;last=s;
+ const list=[];for(const q of RUN.list){const t=sig(q);if(t===null)return;list.push(t)}
+ ls.set(JSON.stringify({v:1,topic:TOPIC.id,mon:window.MON,t:Date.now(),full:!!RUN.full,idx:ri,res:RUN.res.slice(0,RUN.list.length),xp:RUN.xp,list}));
+}
+const _start=start;start=function(l){const r=_start.apply(this,arguments);return r};
+const _next=next;next=function(){const r=_next.apply(this,arguments);try{save()}catch(e){}return r};
+const _rc=renderCard;renderCard=function(){const r=_rc.apply(this,arguments);try{save()}catch(e){}return r};
+const _fin=finish;finish=function(){ls.del();last='';hold=false;return _fin.apply(this,arguments)};
+
+function restore(S){
+ const T=TOPICS[S.topic];if(!T)return false;
+ setTopic(S.topic);
+ const pool=T.pool||[],map=new Map();pool.forEach(q=>{const t=sig(q);if(t&&!map.has(t))map.set(t,q)});
+ const list=S.list.map(t=>map.get(t)||JSON.parse(t));
+ T.qs=list;
+ start(T.qs);
+ RUN.full=!!S.full;RUN.res=S.res.slice();RUN.xp=S.xp||0;
+ if(S.idx>=list.length){hold=false;finish();return true}
+ RUN.idx=S.idx;RUN.attempt=1;RUN.phase='answer';RUN.fb=null;RUN.st=initState(list[S.idx]);
+ try{updateXP()}catch(e){}
+ renderCard();
+ try{jAdvance(S.idx,list.length);if(typeof jStatic==='function')jStatic()}catch(e){}
+ return true;
+}
+function ask(S){
+ const T=TOPICS[S.topic];const name=(T&&(T.name||T.title||T.ten||T.label))||'chặng đang làm';
+ const n=S.list.length,k=Math.min(S.idx+1,n),done=S.res.filter(Boolean).length;
+ const st=document.createElement('style');st.textContent='.p65-bg{position:fixed;inset:0;z-index:99999;background:rgba(10,20,40,.62);display:flex;align-items:center;justify-content:center;padding:16px;font-family:inherit}.p65-bx{background:#fff;color:#15233b;border-radius:18px;max-width:380px;width:100%;padding:20px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35);text-align:center}.p65-bx h3{margin:0 0 8px;font-size:19px}.p65-bx p{margin:0 0 14px;line-height:1.45;font-size:15px}.p65-bx button{display:block;width:100%;margin:8px 0 0;padding:13px 10px;border-radius:12px;font-size:16px;font-weight:700;border:2px solid #2a6df4;cursor:pointer}.p65-y{background:#2a6df4;color:#fff}.p65-n{background:#fff;color:#2a6df4}';
+ document.head.appendChild(st);
+ const bg=document.createElement('div');bg.className='p65-bg';bg.setAttribute('role','dialog');bg.setAttribute('aria-modal','true');
+ bg.innerHTML='<div class="p65-bx"><h3>Em đang làm dở một chặng</h3><p>'+String(name).replace(/[<>&]/g,'')+'<br>Đã làm <b>'+done+'/'+n+'</b> câu · tiếp theo là <b>câu '+k+'</b>. Tiếp tục để khỏi làm lại nhé?</p><button class="p65-y">Tiếp tục câu '+k+'</button><button class="p65-n">Làm lại từ đầu</button></div>';
+ document.body.appendChild(bg);
+ bg.querySelector('.p65-y').onclick=()=>{bg.remove();let ok=false;try{ok=restore(S)}catch(e){console.error(e)}hold=false;last='';if(!ok)ls.del()};
+ bg.querySelector('.p65-n').onclick=()=>{bg.remove();ls.del();hold=false;last=''};
+}
+let S=null;
+try{const raw=ls.get();if(raw){S=JSON.parse(raw);
+ if(!S||S.v!==1||!TOPICS[S.topic]||S.mon!==window.MON||Date.now()-S.t>MAXAGE||!S.list||S.idx<0||S.res.filter(Boolean).length<1||S.idx>S.list.length)S=null}}catch(e){S=null}
+if(!S)ls.del();
+else{hold=true;setTimeout(()=>ask(S),700)}
+window.__p65={save,restore,KEY};
+})();
+
 </script>
 <style>
 .nh-grp>.tcard.p56-moved{margin-top:10px;grid-template-columns:96px 1fr;align-items:stretch}
